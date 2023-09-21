@@ -18,6 +18,7 @@ public class Shift {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer shiftId;
+	private String shiftName;
 	private Integer seats;
 	private LocalTime startTime;
 	private LocalTime endTime;

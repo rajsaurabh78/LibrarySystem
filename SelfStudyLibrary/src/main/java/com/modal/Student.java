@@ -1,5 +1,7 @@
 package com.modal;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,4 +23,6 @@ public class Student {
 	private String password;
 	private String address;
 	private Integer seatNo;
+	private LocalDate DOB;
+	private Boolean payment;
 }

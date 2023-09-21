@@ -20,7 +20,7 @@ public class Admin {
 	private Integer id;
 	private String name;
 	private String email;
-	private String moblie;
+	private String mobile;
 	private String password;
 	private String address;
 	private List<Student> studentList;

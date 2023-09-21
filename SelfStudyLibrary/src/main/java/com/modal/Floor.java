@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class Floor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer floorId;
+	private Integer floorNo;
 	private String name;
 	private List<Shift> shiftList;
 }
