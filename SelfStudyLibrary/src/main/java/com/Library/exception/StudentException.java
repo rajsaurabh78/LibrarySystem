@@ -1,4 +1,4 @@
-package com.exception;
+package com.Library.exception;
 
 public class StudentException extends RuntimeException{
 	public StudentException() {

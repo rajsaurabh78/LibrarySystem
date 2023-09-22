@@ -1,4 +1,4 @@
-package com.exception;
+package com.Library.exception;
 
 public class FloorException extends RuntimeException{
 	public FloorException() {

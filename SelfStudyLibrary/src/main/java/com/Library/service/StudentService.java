@@ -1,10 +1,10 @@
-package com.service;
+package com.Library.service;
 
 import java.util.List;
 
-import com.modal.Library;
-import com.modal.Shift;
-import com.modal.Student;
+import com.Library.modal.Library;
+import com.Library.modal.Shift;
+import com.Library.modal.Student;
 
 public interface StudentService {
 	

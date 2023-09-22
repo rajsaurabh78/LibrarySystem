@@ -1,6 +1,4 @@
-package com.modal;
-
-import java.util.List;
+package com.Library.modal;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,15 +7,20 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Floor {
+public class Admin {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer floorNo;
+	private Integer id;
 	private String name;
-	private List<Shift> shiftList;
+	private String email;
+	private String mobile;
+	private String password;
+	private String address;
+//	private List<Student> studentList;
+//	private MyLibrary library;
 }

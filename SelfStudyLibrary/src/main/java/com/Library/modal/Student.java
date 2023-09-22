@@ -1,11 +1,12 @@
-package com.modal;
+package com.Library.modal;
 
-import java.util.List;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,11 +15,17 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Library {
+public class Student {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer labId;
+	private Integer userId;
 	private String name;
+	private String email;
+	private String password;
 	private String address;
-	private List<Floor> floorList;
+	private Integer seatNo;
+	private LocalDate DOB;
+	private Boolean payment;
+	@OneToOne
+	private Seat seat;
 }

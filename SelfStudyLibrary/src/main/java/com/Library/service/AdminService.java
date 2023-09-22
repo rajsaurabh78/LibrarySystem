@@ -1,12 +1,12 @@
-package com.service;
+package com.Library.service;
 
 import java.util.List;
 
-import com.DTO.StudentDTO;
-import com.modal.Admin;
-import com.modal.Floor;
-import com.modal.Shift;
-import com.modal.Student;
+import com.Library.DTO.StudentDTO;
+import com.Library.modal.Admin;
+import com.Library.modal.Floor;
+import com.Library.modal.Shift;
+import com.Library.modal.Student;
 
 public interface AdminService {
 	

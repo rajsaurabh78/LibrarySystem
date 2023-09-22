@@ -1,4 +1,4 @@
-package com.service;
+package com.Library.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,20 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.DTO.StudentDTO;
-import com.exception.AdminException;
-import com.exception.FloorException;
-import com.exception.SeatException;
-import com.exception.ShiftException;
-import com.exception.StudentException;
-import com.modal.Admin;
-import com.modal.Floor;
-import com.modal.Shift;
-import com.modal.Student;
-import com.repository.AdminRepository;
-import com.repository.FloorRepository;
-import com.repository.ShiftRepository;
-import com.repository.studentRepository;
+import com.Library.DTO.StudentDTO;
+import com.Library.exception.AdminException;
+import com.Library.exception.FloorException;
+import com.Library.exception.SeatException;
+import com.Library.exception.ShiftException;
+import com.Library.exception.StudentException;
+import com.Library.modal.Admin;
+import com.Library.modal.Floor;
+import com.Library.modal.Shift;
+import com.Library.modal.Student;
+import com.Library.repository.AdminRepository;
+import com.Library.repository.FloorRepository;
+import com.Library.repository.ShiftRepository;
+import com.Library.repository.studentRepository;
 @Service
 public class AdminServiceImpl implements AdminService{
 	
@@ -37,8 +37,8 @@ public class AdminServiceImpl implements AdminService{
 	@Autowired
 	private FloorRepository floorRepository;
 	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
 	
 
 	@Override
@@ -81,7 +81,7 @@ public class AdminServiceImpl implements AdminService{
 		for(Floor floor:list) {
 			List<Shift> shiftList=floor.getShiftList();
 			for(Shift i:shiftList) {
-				seats+=i.getSeats();
+				seats+=i.getTotalSeats();
 			}
 		}
 		if(seats==0) {
@@ -151,7 +151,7 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	public Admin registerAdmin(Admin admin) {
-		admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+	//	admin.setPassword(passwordEncoder.encode(admin.getPassword()));
 		return adminRepository.save(admin);
 	}
 
@@ -165,7 +165,7 @@ public class AdminServiceImpl implements AdminService{
 			ad.setAddress(admin.getAddress());
 			ad.setMobile(admin.getMobile());
 			ad.setName(admin.getName());
-			ad.setPassword(passwordEncoder.encode(admin.getPassword()));
+		//	ad.setPassword(passwordEncoder.encode(admin.getPassword()));
 			return adminRepository.save(ad);
 		}
 		else
@@ -232,7 +232,7 @@ public class AdminServiceImpl implements AdminService{
 		if(opt.isPresent()) {
 			Shift sft=opt.get();
 			sft.setShiftName(shift.getShiftName());
-			sft.setSeats(shift.getSeats());
+			sft.setTotalSeats(shift.getTotalSeats());
 			sft.setEndTime(shift.getEndTime());
 			sft.setStartTime(shift.getStartTime());
 			return shiftRepository.save(sft);
@@ -263,7 +263,7 @@ public class AdminServiceImpl implements AdminService{
 			Floor fl=opt.get();
 			List<Shift> list=fl.getShiftList();
 			for(Shift i:list) {
-				i.setSeats(i.getSeats()+newSeats);			
+				i.setTotalSeats(i.getTotalSeats()+newSeats);			
 			}
 			return "Seats increased by :- "+newSeats;
 		}

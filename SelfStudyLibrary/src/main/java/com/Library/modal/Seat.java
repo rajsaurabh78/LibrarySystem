@@ -1,28 +1,24 @@
-package com.modal;
-
-import java.time.LocalDate;
+package com.Library.modal;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Student {
+public class Seat {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer userId;
-	private String name;
-	private String email;
-	private String password;
-	private String address;
 	private Integer seatNo;
-	private LocalDate DOB;
-	private Boolean payment;
+	
+	@OneToOne
+	private Student student;
 }
