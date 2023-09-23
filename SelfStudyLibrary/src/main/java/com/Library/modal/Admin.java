@@ -1,5 +1,6 @@
 package com.Library.modal;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,8 +17,13 @@ public class Admin {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+	
 	private String name;
+	
+	@Column(unique = true)
 	private String email;
+	
+	@Column(unique = true)
 	private String mobile;
 	private String password;
 	private String address;

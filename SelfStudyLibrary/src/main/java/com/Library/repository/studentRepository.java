@@ -10,6 +10,6 @@ import com.Library.modal.Student;
 @Repository
 public interface studentRepository extends JpaRepository<Student, Integer>{
 	Optional<Student> findByEmail(String email);
-	Optional<Student> findBySeatNo(Integer seatNo);
+	//Optional<Student> findBySeat(Integer seatNo);
 	List<Student> findByAddress(String address);
 }
