@@ -3,6 +3,8 @@ package com.Library.modal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +16,7 @@ import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -29,6 +32,7 @@ public class Floor {
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name="libId")
+	@JsonIgnore
 	private Library library;
 	
 	@OneToMany(mappedBy = "floor",cascade = CascadeType.ALL)

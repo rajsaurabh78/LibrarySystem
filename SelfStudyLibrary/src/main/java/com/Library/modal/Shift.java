@@ -4,6 +4,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +29,6 @@ public class Shift {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer shiftId;
 	
-	@Column(unique = true)
 	private String shiftName;
 	
 	private Integer avalibleSeats;
@@ -40,12 +41,10 @@ public class Shift {
 	private List<Student> studentList=new ArrayList<>();
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@NotBlank
-	@NotEmpty
-	@NotNull
+	@JsonIgnore
 	private Floor floor;
 	
-	@OneToMany(cascade =  CascadeType.ALL)
+	@OneToMany(mappedBy = "shift",cascade =  CascadeType.ALL)
 	private List<Seat> seatList=new ArrayList<>();
 	
 }

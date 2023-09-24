@@ -260,11 +260,29 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public Shift addShift(Shift shift) {
-		int size=seatRepository.findAll().size();
-		shift.setAvalibleSeats(size);	
-		return shiftRepository.save(shift);
-		
+	public Shift addShift(Shift shift,Integer floorNo) {
+		List<Seat> seats=seatRepository.findAll();
+		int size=0;
+		for(Seat s:seats) {
+			if(s.getFloor()==floorNo) {
+				size+=seats.size();		
+			}
+		}
+		shift.setAvalibleSeats(size+shift.getSeatList().size());	
+		Optional<Floor> opt=floorRepository.findById(floorNo);
+		List<Shift> sl=new ArrayList<>();
+		sl.add(shift);
+		if(opt.isPresent()) {
+			Floor fl=opt.get();
+			fl.setShiftList(sl);
+			shift.setFloor(fl);
+			List<Seat> sList=shift.getSeatList();
+			for(Seat i:sList) {				i.setFloor(floorNo);
+				i.setShift(shift);
+			}
+			return shiftRepository.save(shift);
+		}else
+			throw new FloorException("Inviled floorNo .");
 	}
 
 	@Override
@@ -332,6 +350,15 @@ public class AdminServiceImpl implements AdminService{
 	public String removeStudentSeat(Integer seatNo) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Library addLibrary(Library library) {
+		List<Floor> fl=library.getFloorList();
+		for(Floor i:fl) {
+			i.setLibrary(library);
+		}
+		return libraryRepository.save(library);
 	}
 		
 

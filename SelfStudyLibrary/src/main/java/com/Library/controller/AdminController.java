@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Library.modal.Admin;
 import com.Library.modal.Floor;
+import com.Library.modal.Library;
 import com.Library.modal.Seat;
 import com.Library.modal.Shift;
 import com.Library.modal.Student;
@@ -28,6 +29,12 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService adminService;
+	
+	@PostMapping("/addlibrary")
+	public ResponseEntity<Library> addLibraryController(@Valid @RequestBody Library library){
+		Library list=adminService.addLibrary(library);
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}	
 	
 	@GetMapping("/students")
 	public ResponseEntity<List<Student>> getAllStudentController(){
@@ -119,9 +126,9 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	
-	@PostMapping("/addshift")
-	public ResponseEntity<Shift> addShiftController(@Valid @RequestBody Shift Shift){
-		Shift list=adminService.addShift(Shift);
+	@PostMapping("/addshift/{floorNo}")
+	public ResponseEntity<Shift> addShiftController(@Valid @RequestBody Shift Shift,@Valid @PathVariable("floorNo") Integer floorNo){
+		Shift list=adminService.addShift(Shift,floorNo);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	

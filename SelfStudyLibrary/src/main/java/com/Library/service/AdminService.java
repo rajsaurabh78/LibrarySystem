@@ -5,6 +5,7 @@ import java.util.List;
 import com.Library.DTO.StudentDTO;
 import com.Library.modal.Admin;
 import com.Library.modal.Floor;
+import com.Library.modal.Library;
 import com.Library.modal.Seat;
 import com.Library.modal.Shift;
 import com.Library.modal.Student;
@@ -31,12 +32,13 @@ public interface AdminService {
 	public Floor updateFloorName(Integer floorNo,String newName);
 	public String removeFloor(Integer floorNo);
 	
-	public Shift addShift(Shift shift);
+	public Shift addShift(Shift shift,Integer floorNo);
 	public Shift updateShift(Shift shift);
 	public String removeShift(Integer ShiftId);
 	//public String updateSeats(Integer floorNo,Integer newSeats);
 	
 	public Seat addSeat(Seat seat);
 	public String removeStudentSeat(Integer seatNo);
+	public Library addLibrary (Library library);
 
 }
