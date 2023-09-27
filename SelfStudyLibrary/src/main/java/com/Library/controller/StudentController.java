@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Library.modal.Library;
 import com.Library.modal.Shift;
 import com.Library.modal.Student;
 import com.Library.service.StudentService;
@@ -34,8 +35,8 @@ public class StudentController {
 		
 	}
 	
-	@GetMapping("/allshift{floorNo}")
-	public ResponseEntity<List<Shift>> getAllShiftByFloorNotController(@Valid @PathVariable("floorNo") Integer floorNo){
+	@GetMapping("/allshift/{floorNo}")
+	public ResponseEntity<List<Shift>> getAllShiftByFloorNoController(@Valid @PathVariable("floorNo") Integer floorNo){
 		
 		List<Shift> sft=studentService.getAllShiftByFloorNo(floorNo);
 		return new ResponseEntity<>(sft,HttpStatus.OK);
@@ -47,6 +48,14 @@ public class StudentController {
 		
 		Student stu=studentService.registerStudent(student);
 		return new ResponseEntity<>(stu,HttpStatus.OK);
+		
+	}
+	
+	@GetMapping("/allDetails")
+	public ResponseEntity<List<Library>> getAllDetailsController(){
+		
+		List<Library> sft=studentService.getAllDetails();
+		return new ResponseEntity<>(sft,HttpStatus.OK);
 		
 	}
 

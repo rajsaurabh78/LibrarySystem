@@ -10,7 +10,7 @@ public interface StudentService {
 	
 	public Student registerStudent(Student student);
 	public List<Shift> getAllShiftByFloorNo(Integer floorNo);
-	public Library getAllDetails();
+	public List<Library> getAllDetails();
 	public Student updateStudent(Student student);
 	public Student getOwnProfile();
 	

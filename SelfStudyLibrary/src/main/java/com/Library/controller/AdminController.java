@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Library.DTO.StudentDTO;
 import com.Library.modal.Admin;
 import com.Library.modal.Floor;
 import com.Library.modal.Library;
@@ -54,15 +55,15 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
-	@GetMapping("/studentfloor/{floorNo}")
+	@GetMapping("/studentfl/{floorNo}")
 	public ResponseEntity<List<Student>> getAllStudentByFloorController(@Valid @PathVariable("floorNo")Integer floorNo){
 		List<Student> list=adminService.getAllStudentByFloor(floorNo);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
 	@GetMapping("/student")
-	public ResponseEntity<Integer> getAllAvalibleSeatsController(){
-		Integer i=adminService.getAllAvalibleSeats();
+	public ResponseEntity<List<Seat>> getAllAvalibleSeatsController(){
+		List<Seat> i=adminService.getAllAvalibleSeats();
 		return new ResponseEntity<>(i,HttpStatus.OK);
 	}
 	
@@ -72,15 +73,21 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/studentdel/{seatNo}")
-	public ResponseEntity<String> removeStudentController(@Valid @PathVariable("seatNo")Integer seatNo){
-		String list=adminService.removeStudent(seatNo);
+	@DeleteMapping("/studentdel/{userId}")
+	public ResponseEntity<String> removeStudentController(@Valid @PathVariable("userId")Integer userId){
+		String list=adminService.removeStudent(userId);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
 	@GetMapping("/studentlist")
-	public ResponseEntity<List<Student>> getStudentAreaWiseController(@Valid @RequestParam("floorNo")String address){
+	public ResponseEntity<List<Student>> getStudentAreaWiseController(@Valid @RequestParam("address")String address){
 		List<Student> list=adminService.getStudentAreaWise(address);
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
+	
+	@GetMapping("/studentno")
+	public ResponseEntity<List<StudentDTO>> getAllStudentWithNoSeatNoController(){
+		List<StudentDTO> list=adminService.getAllStudentWithNoSeatNo();
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
@@ -102,15 +109,15 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	
-	@DeleteMapping("/deladmin")
-	public ResponseEntity<String> removeAdminController(@Valid @PathVariable("Id")Integer id){
+	@DeleteMapping("/deladmin/{id}")
+	public ResponseEntity<String> removeAdminController(@Valid @PathVariable("id")Integer id){
 		String list=adminService.removeAdmin(id);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	
-	@PostMapping("/addfloor")
-	public ResponseEntity<Floor> addFloorController(@Valid @RequestBody Floor floor){
-		Floor list=adminService.addFloor(floor);
+	@PostMapping("/addfloor/{lId}")
+	public ResponseEntity<Floor> addFloorController(@Valid @RequestBody Floor floor,@Valid @PathVariable("lId") Integer lId){
+		Floor list=adminService.addFloor(floor,lId);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	
@@ -145,15 +152,15 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	
-	@PostMapping("/addseat")
-	public ResponseEntity<Seat> addSeatController(@Valid @RequestBody Seat seat){
-		Seat list=adminService.addSeat(seat);
+	@PostMapping("/addseat/{shiftNo}")
+	public ResponseEntity<Seat> addSeatController(@Valid @PathVariable Integer shiftNo){
+		Seat list=adminService.addSeat(shiftNo);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
-	@PutMapping("/upseat/{seatNo}")
-	public ResponseEntity<String> removeStudentSeatController(@Valid @PathVariable("seatNo") Integer seatNo){
-		String list=adminService.removeStudentSeat(seatNo);
+	@PutMapping("/upseat/{seatNo_Or_UserId}")
+	public ResponseEntity<String> removeStudentSeatController(@Valid @PathVariable("seatNo_Or_UserId") Integer seatNo_Or_UserId){
+		String list=adminService.removeStudentSeat(seatNo_Or_UserId);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 

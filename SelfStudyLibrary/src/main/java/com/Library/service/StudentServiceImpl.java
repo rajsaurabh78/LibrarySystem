@@ -13,6 +13,7 @@ import com.Library.modal.Library;
 import com.Library.modal.Shift;
 import com.Library.modal.Student;
 import com.Library.repository.FloorRepository;
+import com.Library.repository.LibraryRepository;
 import com.Library.repository.studentRepository;
 @Service
 public class StudentServiceImpl implements StudentService{
@@ -25,33 +26,51 @@ public class StudentServiceImpl implements StudentService{
 	
 	@Autowired
 	private FloorRepository floorRepository;
+	
+	@Autowired
+	private LibraryRepository libraryRepository;
 
-	@Override
+	@Override//work
 	public Student registerStudent(Student student) {
 		
 	//	student.setPassword(passwordEncoder.encode(student.getPassword()));
 		return studentRepository.save(student);
 	}
 
-	@Override
+	@Override//work
 	public List<Shift> getAllShiftByFloorNo(Integer floorNo) {
 		
 		Optional<Floor> opt=floorRepository.findById(floorNo);
 		if(opt.isPresent()) {
-			return opt.get().getShiftList();
+			Floor fl=opt.get();
+			List<Shift> sfts=fl.getShiftList();
+			for(Shift s:sfts) {
+				s.setSeatList(null);
+			}
+			return fl.getShiftList();
 		}
 		else
-			throw new ShiftException("Inviled shift Id .");
+			throw new ShiftException("Inviled floor No .");
 
 	}
 
-	@Override
-	public Library getAllDetails() {
-		
-		return null;
+	@Override//work
+	public List<Library> getAllDetails() {
+		List<Library> labs=libraryRepository.findAll();
+		for(Library l:labs) {
+			List<Floor> fls=l.getFloorList();
+			for(Floor f:fls) {
+				List<Shift> sft=f.getShiftList();
+				for(Shift s:sft) {
+					s.setSeatList(null);
+				}
+			}
+			
+		}
+		return labs;
 	}
 
-	@Override
+	@Override//work
 	public Student updateStudent(Student student) {
 		
 		Optional<Student> opt=studentRepository.findById(student.getUserId());
