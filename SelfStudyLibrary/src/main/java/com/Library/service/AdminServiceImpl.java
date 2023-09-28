@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.Library.DTO.StudentDTO;
@@ -47,8 +48,8 @@ public class AdminServiceImpl implements AdminService{
 	@Autowired
 	private SeatRepository seatRepository;
 	
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 
 	@Override//work
@@ -192,40 +193,91 @@ public class AdminServiceImpl implements AdminService{
 		}
 	}
 
-	@Override//work but some extra 4
+	@Override//not_work_proper 
 	public String studentSeatAllotement(Integer Id) {
 		
 		Optional<Student> opt=studentRepository.findById(Id);
-		if(opt.isPresent()&& opt.get().getPayment()==true ) {
-			Student stu=opt.get();			Optional<Shift> op=shiftRepository.findById(stu.getShift());
-			if(op.isPresent()) {
-				Shift sft=op.get();
-				if(sft.getFloor().getFloorNo()==stu.getFloor() ) {
-					List<Seat> seats=sft.getSeatList();
-					for(Seat s:seats) {
-						if(s.getStudent()==null ) {
-							s.setStudent(stu);
-							List<Seat> sl=new ArrayList<>();
-							sl.add(s);
-							stu.setSeats(sl);
-							studentRepository.save(stu);
-							return "Registered .";
-						}
-					}throw new SeatException("No seat avalible....!");
-				}throw new FloorException("Inviled Floor No./ Seat not avalible....");
-			}else
-				throw new ShiftException("Inviled Shift No./ Seat not avalible....");
+		if(opt.isPresent()&& opt.get().getPayment()==true ){
+			Student stu=opt.get();
+			String str=stu.getShift();
+			if(str.equals("FIRST")) {
+				Seat seat=seatRepository.getFirstShiftSeat();
+				if(seat!=null) {
+					List<Seat> sl=new ArrayList<>();
+					seat.setStudent(stu);
+					sl.add(seat);
+					stu.setSeats(sl);
+					stu.setShift(null);
+					studentRepository.save(stu);			
+					return "Registered in first shift.";
+				}else {
+					throw new SeatException("Seat not avalible.");
+				}	
 				
+			}else if(str.equals("SECOND")) {
+				
+				Seat seat=seatRepository.getSecondSeat();
+				if(seat!=null) {
+					List<Seat> sl=new ArrayList<>();
+					seat.setStudent(stu);
+					sl.add(seat);
+					stu.setShift(null);
+					stu.setSeats(sl);
+					studentRepository.save(stu);
+					return "Registered in second shift.";
+				}else {
+					throw new SeatException("Seat not avalible.");
+				}
+				
+			}else if(str.equals("THIRD")) {
+				
+				Seat seat=seatRepository.getThirdSeat();
+				if(seat!=null) {
+					List<Seat> sl=new ArrayList<>();
+					seat.setStudent(stu);
+					sl.add(seat);
+					stu.setShift(null);
+					stu.setSeats(sl);
+					studentRepository.save(stu);
+					return "Registered in third shift.";
+				}else {
+					throw new SeatException("Seat not avalible.");
+				}
+				
+			}else if(str.equals("ALL")) {
+				
+				Seat seat=seatRepository.getFirstShiftSeat();
+				Seat seat1=seatRepository.getFirstShiftSeat();
+				Seat seat2=seatRepository.getFirstShiftSeat();
+				if(seat!=null&&seat1!=null&&seat2!=null) {
+					
+					List<Seat> sl=new ArrayList<>();
+					seat.setStudent(stu);
+					seat1.setStudent(stu);
+					seat2.setStudent(stu);
+					sl.add(seat);
+					sl.add(seat1);
+					sl.add(seat2);
+		//			stu.setShift(null);
+					stu.setSeats(sl);
+				//	studentRepository.save(stu);
+					seatRepository.saveAll(sl);
+					return "Registered with all shifts .";
+					
+				}else {
+					throw new SeatException("Seat not avalible.");
+				}
+					
+			}else {
+				
+				throw new ShiftException("Inviled Shift name.");
+				
+			}
 		}else
-			throw new StudentException("Inviled Student Id / Student already registered with a seat./Payment is not clear.");
+			throw new StudentException("Inviled Student Id / Payment is not clear.");
 		
 	}
 
-	@Override//work
-	public Admin registerAdmin(Admin admin) {
-	//	admin.setPassword(passwordEncoder.encode(admin.getPassword()));
-		return adminRepository.save(admin);
-	}
 
 	@Override//work
 	public Admin updateAdmin(Admin admin) {
@@ -237,7 +289,7 @@ public class AdminServiceImpl implements AdminService{
 			ad.setAddress(admin.getAddress());
 			ad.setMobile(admin.getMobile());
 			ad.setName(admin.getName());
-		//	ad.setPassword(passwordEncoder.encode(admin.getPassword()));
+			ad.setPassword(passwordEncoder.encode(admin.getPassword()));
 			return adminRepository.save(ad);
 		}
 		else
@@ -379,16 +431,18 @@ public class AdminServiceImpl implements AdminService{
 			
 			return "Student removed successfully from seat no."+seatNo_Or_UserId;
 			}else
-				throw new SeatException("Inviled seatNo_Or_UserId ."+seatNo_Or_UserId);
+				throw new SeatException("Inviled seatNo :- "+seatNo_Or_UserId);
 		}else {
 				Student st=op.get();
-				List<Seat> seat=st.getSeats();
-				for(Seat s:seat) {
-					s.setStudent(null);
-				}
-				seatRepository.saveAll(seat);	
-			
-			return "Use Successfully removed  from all seats with User Id :- "+seatNo_Or_UserId;
+				if(st.getSeats().size()>0 ) {
+					List<Seat> seat=st.getSeats();
+					for(Seat s:seat) {
+						s.setStudent(null);
+					}
+					seatRepository.saveAll(seat);	
+					return "Use Successfully removed  from all seats with User Id :- "+seatNo_Or_UserId;
+				}else
+					throw new SeatException("Inviled UserId :- "+seatNo_Or_UserId);
 		}
 
 	}

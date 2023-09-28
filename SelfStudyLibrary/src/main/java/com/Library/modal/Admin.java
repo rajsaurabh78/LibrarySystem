@@ -27,6 +27,5 @@ public class Admin {
 	private String mobile;
 	private String password;
 	private String address;
-//	private List<Student> studentList;
-//	private MyLibrary library;
+
 }

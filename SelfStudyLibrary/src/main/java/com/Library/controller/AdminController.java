@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,14 +23,19 @@ import com.Library.modal.Seat;
 import com.Library.modal.Shift;
 import com.Library.modal.Student;
 import com.Library.service.AdminService;
+import com.Library.service.StudentService;
 
 import jakarta.validation.Valid;
 
 @RestController
+@RequestMapping("/admin")
 public class AdminController {
 	
 	@Autowired
 	private AdminService adminService;
+	
+	@Autowired
+	private StudentService studentService;
 	
 	@PostMapping("/addlibrary")
 	public ResponseEntity<Library> addLibraryController(@Valid @RequestBody Library library){
@@ -98,9 +104,9 @@ public class AdminController {
 	}
 	
 	@PostMapping("/admin")
-	public ResponseEntity<Admin> registerAdminController(@Valid @RequestBody Admin admin){
-		Admin list=adminService.registerAdmin(admin);
-		return new ResponseEntity<>(list,HttpStatus.OK);
+	public ResponseEntity<Student> registerAdminController(@Valid @RequestBody Student student){
+		Student list=studentService.registerStudent(student);
+		return new ResponseEntity<>(list,HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/upadmin")
@@ -118,7 +124,7 @@ public class AdminController {
 	@PostMapping("/addfloor/{lId}")
 	public ResponseEntity<Floor> addFloorController(@Valid @RequestBody Floor floor,@Valid @PathVariable("lId") Integer lId){
 		Floor list=adminService.addFloor(floor,lId);
-		return new ResponseEntity<>(list,HttpStatus.OK);
+		return new ResponseEntity<>(list,HttpStatus.CREATED);
 	}	
 	
 	@PutMapping("/upfloor/{floorNo}/{newName}")
@@ -136,7 +142,7 @@ public class AdminController {
 	@PostMapping("/addshift/{floorNo}")
 	public ResponseEntity<Shift> addShiftController(@Valid @RequestBody Shift Shift,@Valid @PathVariable("floorNo") Integer floorNo){
 		Shift list=adminService.addShift(Shift,floorNo);
-		return new ResponseEntity<>(list,HttpStatus.OK);
+		return new ResponseEntity<>(list,HttpStatus.CREATED);
 	}	
 	
 	
@@ -155,7 +161,7 @@ public class AdminController {
 	@PostMapping("/addseat/{shiftNo}")
 	public ResponseEntity<Seat> addSeatController(@Valid @PathVariable Integer shiftNo){
 		Seat list=adminService.addSeat(shiftNo);
-		return new ResponseEntity<>(list,HttpStatus.OK);
+		return new ResponseEntity<>(list,HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/upseat/{seatNo_Or_UserId}")

@@ -1,13 +1,16 @@
 package com.Library.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.Library.exception.ShiftException;
 import com.Library.exception.StudentException;
+import com.Library.modal.Authority;
 import com.Library.modal.Floor;
 import com.Library.modal.Library;
 import com.Library.modal.Shift;
@@ -21,8 +24,8 @@ public class StudentServiceImpl implements StudentService{
 	@Autowired
 	private studentRepository studentRepository;
 	
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private FloorRepository floorRepository;
@@ -33,7 +36,12 @@ public class StudentServiceImpl implements StudentService{
 	@Override//work
 	public Student registerStudent(Student student) {
 		
-	//	student.setPassword(passwordEncoder.encode(student.getPassword()));
+		student.setPassword(passwordEncoder.encode(student.getPassword()));
+		student.setShift(student.getShift().toUpperCase() );
+		List<Authority> auths= new ArrayList<>();
+		auths.add(new Authority(null,"ROLE_STUDENT", student));
+		auths.add(new Authority(null,"ROLE_USER", student));
+		student.setAuthority(auths);
 		return studentRepository.save(student);
 	}
 
@@ -82,7 +90,9 @@ public class StudentServiceImpl implements StudentService{
 			st.setEmail(student.getEmail());
 			st.setName(student.getName());
 			st.setDOB(student.getDOB());
-	//		st.setPassword(passwordEncoder.encode(student.getPassword()));
+			st.setShift(student.getShift());
+			st.setShift(student.getShift().toUpperCase() );
+			st.setPassword(passwordEncoder.encode(student.getPassword()));
 			return studentRepository.save(st);
 		}
 	}

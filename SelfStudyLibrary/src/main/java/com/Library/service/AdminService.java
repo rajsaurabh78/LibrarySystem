@@ -24,7 +24,6 @@ public interface AdminService {
 	public List<StudentDTO> getAllStudentWithNoSeatNo();
 	public String studentSeatAllotement(Integer Id);
 	
-	public Admin registerAdmin(Admin admin);
 	public Admin updateAdmin(Admin admin);
 	public String removeAdmin(Integer id);
 	
