@@ -16,6 +16,7 @@ import com.Library.exception.SeatException;
 import com.Library.exception.ShiftException;
 import com.Library.exception.StudentException;
 import com.Library.modal.Admin;
+import com.Library.modal.Details;
 import com.Library.modal.Floor;
 import com.Library.modal.Library;
 import com.Library.modal.Seat;
