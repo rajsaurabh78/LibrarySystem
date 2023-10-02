@@ -14,18 +14,24 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.Library.modal.Admin;
 import com.Library.modal.Authority;
 import com.Library.modal.Student;
+import com.Library.repository.AdminRepository;
 import com.Library.repository.studentRepository;
 @Service
 public class UserUserDetailsService implements UserDetailsService{
 
 	@Autowired
 	private studentRepository studentRepository;
+	
+	@Autowired
+	private AdminRepository adminRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
+		
+		if(username.length()!=10) {
 		Optional<Student> opt= studentRepository.findByEmail(username);
 
 		if(opt.isPresent()) {
@@ -40,11 +46,11 @@ public class UserUserDetailsService implements UserDetailsService{
 			
 			for(Authority auth:auths) {
 				SimpleGrantedAuthority sga=new SimpleGrantedAuthority(auth.getName());
-				System.out.println("siga "+sga);
+		//		System.out.println("siga "+sga);
 				authorities.add(sga);
 			}
 			
-			System.out.println("granted authorities "+authorities);
+		//	System.out.println("granted authorities "+authorities);
 			
 			
 			return new User(stu.getEmail(), stu.getPassword(), authorities);
@@ -52,9 +58,37 @@ public class UserUserDetailsService implements UserDetailsService{
 			
 		}else
 			throw new BadCredentialsException("User Details not found with this username: "+username);
-	}
-	
-	
+		}else {
+			Optional<Admin> opt= adminRepository.findByMobile(username);
 
+			if(opt.isPresent()) {
+				
+				Admin adm= opt.get();
+				
+				List<GrantedAuthority> authorities = new ArrayList<>();
+			
+				
+				
+				List<Authority> auths= adm.getAuthorities();
+				
+				for(Authority auth:auths) {
+					SimpleGrantedAuthority sga=new SimpleGrantedAuthority(auth.getName());
+			//		System.out.println("siga "+sga);
+					authorities.add(sga);
+				}
+				
+		//		System.out.println("granted authorities "+authorities);
+				
+				
+				return new User(adm.getMobile(), adm.getPassword(), authorities);
+				
+				
+			}else
+				throw new BadCredentialsException("User Details not found with this username: "+username);
+		}
+		
+		
+		
+	}
 
 }

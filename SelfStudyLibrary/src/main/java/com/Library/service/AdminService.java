@@ -24,6 +24,7 @@ public interface AdminService {
 	public List<StudentDTO> getAllStudentWithNoSeatNo();
 	public String studentSeatAllotement(Integer Id);
 	
+	public Admin addAdmin(Admin admin);
 	public Admin updateAdmin(Admin admin);
 	public String removeAdmin(Integer id);
 	
@@ -34,7 +35,6 @@ public interface AdminService {
 	public Shift addShift(Shift shift,Integer floorNo);
 	public Shift updateShift(Shift shift);
 	public String removeShift(Integer hiftId);
-	//public String updateSeats(Integer floorNo,Integer newSeats);
 	
 	public Seat addSeat(Integer shiftNo);
 	public String removeStudentSeat(Integer seatNo_Or_UserId);

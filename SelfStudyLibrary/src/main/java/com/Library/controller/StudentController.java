@@ -21,19 +21,19 @@ import com.Library.service.StudentService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/register")
+@RequestMapping("/students")
 public class StudentController {
 	
 	@Autowired
 	private StudentService studentService;
 	
-	@PostMapping("/addStudent")
-	public ResponseEntity<Student> registerStudentController(@Valid @RequestBody Student student){
-		
-		Student stu=studentService.registerStudent(student);
-		return new ResponseEntity<>(stu,HttpStatus.CREATED);
-		
-	}
+//	@PostMapping("/addStudent")
+//	public ResponseEntity<Student> registerStudentController(@Valid @RequestBody Student student){
+//		
+//		Student stu=studentService.registerStudent(student);
+//		return new ResponseEntity<>(stu,HttpStatus.CREATED);
+//		
+//	}
 	
 	@GetMapping("/allshift/{floorNo}")
 	public ResponseEntity<List<Shift>> getAllShiftByFloorNoController(@Valid @PathVariable("floorNo") Integer floorNo){

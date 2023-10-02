@@ -36,5 +36,8 @@ public class Authority {
 	@JsonIgnore
 	private Student user;
 	
+	@ManyToOne
+	@JsonIgnore
+	private Admin admin;
 	
 }

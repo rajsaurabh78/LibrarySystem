@@ -32,7 +32,7 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (null != authentication) {
         	
-        	System.out.println("auth.getAuthorities "+authentication.getAuthorities());
+    //    	System.out.println("auth.getAuthorities "+authentication.getAuthorities());
         	
         	
             SecretKey key = Keys.hmacShaKeyFor(SecurityConstants.JWT_KEY.getBytes());
@@ -64,7 +64,7 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
     private String populateAuthorities(Collection<? extends GrantedAuthority> collection) {
         
     	Set<String> authoritiesSet = new HashSet<>();
-        
+    	
         for (GrantedAuthority authority : collection) {
             authoritiesSet.add(authority.getAuthority());
         }
@@ -78,8 +78,15 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
 
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-	
-        return !request.getServletPath().equals("/signIn");	
+		
+		boolean a=request.getServletPath().equals("/signIn");
+		boolean b=request.getServletPath().equals("/logIn");
+		if(a) {
+			return !a;
+		}else {
+			return !b;
+		}
+//        request.getServletPath().equals("/logIn");	
 	}
 	
 

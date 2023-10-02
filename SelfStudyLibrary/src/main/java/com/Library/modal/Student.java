@@ -1,10 +1,13 @@
 package com.Library.modal;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,12 +31,12 @@ public class Student extends Details{
 	
 	private String shift;
 	
-	private Integer floor;
+//	private Integer floor;
 	
 	@OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
 	private List<Seat> seats=new ArrayList<>();
 	
-	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<Authority> authority=new ArrayList<>();
 	
 //    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)

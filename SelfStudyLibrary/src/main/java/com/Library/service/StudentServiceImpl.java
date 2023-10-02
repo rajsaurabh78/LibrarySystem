@@ -1,6 +1,7 @@
 package com.Library.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.Library.exception.LibraryException;
 import com.Library.exception.ShiftException;
 import com.Library.exception.StudentException;
 import com.Library.modal.Authority;
@@ -15,6 +17,7 @@ import com.Library.modal.Floor;
 import com.Library.modal.Library;
 import com.Library.modal.Shift;
 import com.Library.modal.Student;
+import com.Library.repository.AdminRepository;
 import com.Library.repository.FloorRepository;
 import com.Library.repository.LibraryRepository;
 import com.Library.repository.studentRepository;
@@ -32,6 +35,9 @@ public class StudentServiceImpl implements StudentService{
 	
 	@Autowired
 	private LibraryRepository libraryRepository;
+	
+	@Autowired
+	private AdminRepository adminRepository;
 
 	@Override//work
 	public Student registerStudent(Student student) {
@@ -39,8 +45,8 @@ public class StudentServiceImpl implements StudentService{
 		student.setPassword(passwordEncoder.encode(student.getPassword()));
 		student.setShift(student.getShift().toUpperCase() );
 		List<Authority> auths= new ArrayList<>();
-		auths.add(new Authority(null,"ROLE_STUDENT", student));
-		auths.add(new Authority(null,"ROLE_USER", student));
+		auths.add(new Authority(null,"ROLE_STUDENT", student,null));
+		auths.add(new Authority(null,"ROLE_USER", student,null));
 		student.setAuthority(auths);
 		return studentRepository.save(student);
 	}
@@ -75,7 +81,11 @@ public class StudentServiceImpl implements StudentService{
 			}
 			
 		}
-		return labs;
+		if(labs.size()>0) {
+			return labs;
+		}else
+			throw new LibraryException("No details avalible...");
+		
 	}
 
 	@Override//work
@@ -90,8 +100,7 @@ public class StudentServiceImpl implements StudentService{
 			st.setEmail(student.getEmail());
 			st.setName(student.getName());
 			st.setDOB(student.getDOB());
-			st.setShift(student.getShift());
-			st.setShift(student.getShift().toUpperCase() );
+			st.setShift(student.getShift().toUpperCase());
 			st.setPassword(passwordEncoder.encode(student.getPassword()));
 			return studentRepository.save(st);
 		}
@@ -102,5 +111,12 @@ public class StudentServiceImpl implements StudentService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+//	@Override
+//	public Admin getAdminByMobile(String mobile) {
+//
+//		return adminRepository.findByMobile(mobile).orElseThrow(()->new AdminException("Inviled mobile no ."));
+//		
+//	}
 
 }

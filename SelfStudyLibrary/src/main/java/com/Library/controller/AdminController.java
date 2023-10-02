@@ -34,9 +34,6 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
-	@Autowired
-	private StudentService studentService;
-	
 	@PostMapping("/addlibrary")
 	public ResponseEntity<Library> addLibraryController(@Valid @RequestBody Library library){
 		Library list=adminService.addLibrary(library);
@@ -60,7 +57,7 @@ public class AdminController {
 		Student list=adminService.getStudentBySeatNo(seatNo);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
-	
+	//need
 	@GetMapping("/studentfl/{floorNo}")
 	public ResponseEntity<List<Student>> getAllStudentByFloorController(@Valid @PathVariable("floorNo")Integer floorNo){
 		List<Student> list=adminService.getAllStudentByFloor(floorNo);
@@ -90,24 +87,24 @@ public class AdminController {
 		List<Student> list=adminService.getStudentAreaWise(address);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/studentno")
 	public ResponseEntity<List<StudentDTO>> getAllStudentWithNoSeatNoController(){
 		List<StudentDTO> list=adminService.getAllStudentWithNoSeatNo();
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
-	
+	//need
 	@GetMapping("/studentseat/{id}")
 	public ResponseEntity<String> studentSeatAllotementController(@Valid @PathVariable("id")Integer id){
 		String list=adminService.studentSeatAllotement(id);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
-	@PostMapping("/admin")
-	public ResponseEntity<Student> registerAdminController(@Valid @RequestBody Student student){
-		Student list=studentService.registerStudent(student);
-		return new ResponseEntity<>(list,HttpStatus.CREATED);
-	}
+//	@PostMapping("/admin")
+//	public ResponseEntity<Student> registerAdminController(@Valid @RequestBody Student student){
+//		Student list=studentService.registerStudent(student);
+//		return new ResponseEntity<>(list,HttpStatus.CREATED);
+//	}
 	
 	@PutMapping("/upadmin")
 	public ResponseEntity<Admin> updateAdminController(@Valid @RequestBody Admin admin){
@@ -151,14 +148,14 @@ public class AdminController {
 		Shift list=adminService.updateShift(shift);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
-	
+	//check one last
 	@DeleteMapping("/delshift/{shiftId}")
 	public ResponseEntity<String> removeShiftController(@Valid @PathVariable("shiftId") Integer shiftId){
 		String list=adminService.removeShift(shiftId);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	
-	@PostMapping("/addseat/{shiftNo}")
+	@PostMapping("/o/{shiftNo}")
 	public ResponseEntity<Seat> addSeatController(@Valid @PathVariable Integer shiftNo){
 		Seat list=adminService.addSeat(shiftNo);
 		return new ResponseEntity<>(list,HttpStatus.CREATED);
