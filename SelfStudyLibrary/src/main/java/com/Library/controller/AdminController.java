@@ -100,6 +100,11 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
+	@GetMapping("/studentseats/{id}/{shiftName}")
+	public ResponseEntity<String> seatAllotementManualController(@Valid @PathVariable("id")Integer id,@Valid @PathVariable("shiftName")String shiftName){
+		String list=adminService.seatAllotementManual(id, shiftName.toUpperCase());
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
 //	@PostMapping("/admin")
 //	public ResponseEntity<Student> registerAdminController(@Valid @RequestBody Student student){
 //		Student list=studentService.registerStudent(student);

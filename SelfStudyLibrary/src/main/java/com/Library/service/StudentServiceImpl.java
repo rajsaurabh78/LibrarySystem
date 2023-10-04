@@ -43,7 +43,8 @@ public class StudentServiceImpl implements StudentService{
 	public Student registerStudent(Student student) {
 		
 		student.setPassword(passwordEncoder.encode(student.getPassword()));
-		student.setShift(student.getShift().toUpperCase() );
+		student.setProvidedShift(null);
+		student.setWantedShift(student.getWantedShift().toUpperCase() );
 		List<Authority> auths= new ArrayList<>();
 		auths.add(new Authority(null,"ROLE_STUDENT", student,null));
 		auths.add(new Authority(null,"ROLE_USER", student,null));
@@ -100,7 +101,7 @@ public class StudentServiceImpl implements StudentService{
 			st.setEmail(student.getEmail());
 			st.setName(student.getName());
 			st.setDOB(student.getDOB());
-			st.setShift(student.getShift().toUpperCase());
+			st.setWantedShift(student.getWantedShift().toUpperCase());
 			st.setPassword(passwordEncoder.encode(student.getPassword()));
 			return studentRepository.save(st);
 		}

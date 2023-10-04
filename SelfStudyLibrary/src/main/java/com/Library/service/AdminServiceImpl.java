@@ -1,8 +1,10 @@
 package com.Library.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -199,87 +201,93 @@ public class AdminServiceImpl implements AdminService{
 	public String studentSeatAllotement(Integer Id) {
 		
 		Optional<Student> opt=studentRepository.findById(Id);
-		if(opt.isPresent()&& opt.get().getPayment()==true ){
+		if(opt.isPresent()&& opt.get().getPayment()==true){
+			boolean flag=true;
 			Student stu=opt.get();
-			String str=stu.getShift();
-			if(str.equals("FIRST")) {
-				Seat seat=seatRepository.getFirstShiftSeat();
-				if(seat!=null) {
-					List<Seat> sl=new ArrayList<>();
-					seat.setStudent(stu);
-					sl.add(seat);
-					stu.setSeats(sl);
-					stu.setShift(null);
-					studentRepository.save(stu);			
-					return "Registered in first shift.";
-				}else {
-					throw new SeatException("Seat not avalible.");
-				}	
-				
-			}else if(str.equals("SECOND")) {
-				
-				Seat seat=seatRepository.getSecondSeat();
-				if(seat!=null) {
-					List<Seat> sl=new ArrayList<>();
-					seat.setStudent(stu);
-					sl.add(seat);
-					stu.setShift(null);
-					stu.setSeats(sl);
-					studentRepository.save(stu);
-					return "Registered in second shift.";
-				}else {
-					throw new SeatException("Seat not avalible.");
-				}
-				
-			}else if(str.equals("THIRD")) {
-				
-				Seat seat=seatRepository.getThirdSeat();
-				if(seat!=null) {
-					List<Seat> sl=new ArrayList<>();
-					seat.setStudent(stu);
-					sl.add(seat);
-					stu.setShift(null);
-					stu.setSeats(sl);
-					studentRepository.save(stu);
-					return "Registered in third shift.";
-				}else {
-					throw new SeatException("Seat not avalible.");
-				}
-				
-			}else if(str.equals("ALL")) {
-				
-				Seat seat=seatRepository.getFirstShiftSeat();
-				Seat seat1=seatRepository.getFirstShiftSeat();
-				Seat seat2=seatRepository.getFirstShiftSeat();
-				if(seat!=null&&seat1!=null&&seat2!=null) {
-					
-					List<Seat> sl=new ArrayList<>();
-					seat.setStudent(stu);
-					seat1.setStudent(stu);
-					seat2.setStudent(stu);
-					sl.add(seat);
-					sl.add(seat1);
-					sl.add(seat2);
-		//			stu.setShift(null);
-					stu.setSeats(sl);
-				//	studentRepository.save(stu);
-					seatRepository.saveAll(sl);
-					return "Registered with all shifts .";
-					
-				}else {
-					throw new SeatException("Seat not avalible.");
-				}
-					
+			String shiftName=stu.getWantedShift();
+			Seat seat;
+			if(shiftName.equals("FIRST") ) {
+				seat=seatRepository.getFirstShiftSeat();
+			}else if(shiftName.equals("SECOND")) {
+				seat=seatRepository.getSecondSeat();
+			}else if(shiftName.equals("THIRD")) {
+				seat=seatRepository.getThirdSeat();
 			}else {
-				
-				throw new ShiftException("Inviled Shift name.");
-				
+				throw new ShiftException("Inviled shift name .");
+			}
+			List<Seat> seats=stu.getSeats();			
+			if(seats.size()>0) {
+				for(Seat s:seats) {
+					if(s.getShift().getShiftName().toUpperCase().equals(shiftName)) {
+						flag=false;
+						break;
+					}	
+				}
+			}
+			if(seat!=null) {
+				if(flag) {
+					List<Seat> sl=new ArrayList<>();
+					seat.setStudent(stu);
+					sl.add(seat);
+					stu.setSeats(sl);
+					stu.setProvidedShift(stu.getProvidedShift()+shiftName+",");
+					studentRepository.save(stu);			
+					return "Registered in shift."+seat.getShift().getShiftName() ;
+				}else
+					throw new SeatException("Student is already in shift "+seat.getShift().getShiftName() );
+			}else {
+				throw new SeatException("Seat not avalible .");
 			}
 		}else
 			throw new StudentException("Inviled Student Id / Payment is not clear.");
 		
 	}
-
+	
+	
+	@Override
+	public String seatAllotementManual(Integer id,String shiftName) {
+		Seat seat;
+		if(shiftName.equals("FIRST") ) {
+			seat=seatRepository.getFirstShiftSeat();
+		}else if(shiftName.equals("SECOND")) {
+			seat=seatRepository.getSecondSeat();
+		}else if(shiftName.equals("THIRD")) {
+			seat=seatRepository.getThirdSeat();
+		}else {
+			throw new ShiftException("Inviled shift name .");
+		}
+		Optional<Student> opt=studentRepository.findById(id);
+		if(opt.isPresent()&& opt.get().getPayment()==true){
+			boolean flag=true;
+			Student stu=opt.get();
+			List<Seat> seats=stu.getSeats();			
+			if(seats.size()>0) {
+				for(Seat s:seats) {
+					if(s.getShift().getShiftName().toUpperCase().equals(shiftName)) {
+						flag=false;
+						break;
+					}	
+				}
+			}
+			if(seat!=null) {
+				if(flag) {
+					List<Seat> sl=new ArrayList<>();
+					seat.setStudent(stu);
+					sl.add(seat);
+					stu.setProvidedShift(stu.getProvidedShift()+shiftName+",");
+					stu.setSeats(sl);
+					studentRepository.save(stu);			
+					return "Registered in shift."+seat.getShift().getShiftName() ;
+				}else
+					throw new SeatException("Student is already in shift "+seat.getShift().getShiftName() );
+			}else {
+				throw new SeatException("Seat not avalible .");
+			}
+			
+		}else
+			throw new StudentException("Inviled Student Id / Payment is not clear.");
+		
+	}
 
 	@Override
 	public Admin updateAdmin(Admin admin) {
@@ -470,6 +478,8 @@ public class AdminServiceImpl implements AdminService{
 		return adminRepository.save(admin);
 		
 	}
+
+
 		
 
 }

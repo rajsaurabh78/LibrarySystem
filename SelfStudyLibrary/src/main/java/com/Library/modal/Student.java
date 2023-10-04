@@ -1,9 +1,7 @@
 package com.Library.modal;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -29,18 +27,14 @@ public class Student extends Details{
 
 	private Boolean payment;
 	
-	private String shift;
+	private String wantedShift;
 	
-//	private Integer floor;
+	private String providedShift;
 	
 	@OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
 	private List<Seat> seats=new ArrayList<>();
 	
 	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<Authority> authority=new ArrayList<>();
-	
-//    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-//    @JoinColumn(name="seatNo")
-//    @JsonIgnore
-//	private Seat seat;
+
 }

@@ -23,6 +23,7 @@ public interface AdminService {
 	//cont add 
 	public List<StudentDTO> getAllStudentWithNoSeatNo();
 	public String studentSeatAllotement(Integer Id);
+	public String seatAllotementManual(Integer id,String shiftName);
 	
 	public Admin addAdmin(Admin admin);
 	public Admin updateAdmin(Admin admin);
