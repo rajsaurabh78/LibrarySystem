@@ -7,7 +7,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +14,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -25,19 +27,28 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"shiftName", "floorId"}))
 public class Shift {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator ="shift_seq")
+	@SequenceGenerator(name="shift_seq", sequenceName="shift_seq",allocationSize=1, initialValue=1)
 	private Integer shiftId;
 	
+	@NotBlank(message ="ShiftName should not Blank." )
+	@NotEmpty(message ="ShiftName should not Empty." )
+	@NotNull(message ="ShiftName should not Null." )
 	private String shiftName;
 	
+	@NotBlank(message ="StartTime should not Blank." )
+	@NotEmpty(message ="StartTime should not Empty." )
+	@NotNull(message ="StartTime should not Null." )
 	private LocalTime startTime;
 	
+	@NotBlank(message ="EndTime should not Blank." )
+	@NotEmpty(message ="EndTime should not Empty." )
+	@NotNull(message ="EndTime should not Null." )
 	private LocalTime endTime;
-	
-//	@OneToMany(cascade =  CascadeType.ALL)
-//	private List<Student> studentList=new ArrayList<>();
 	
 	@ManyToOne
 	@JsonIgnore

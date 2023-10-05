@@ -36,8 +36,6 @@ public class StudentServiceImpl implements StudentService{
 	@Autowired
 	private LibraryRepository libraryRepository;
 	
-	@Autowired
-	private AdminRepository adminRepository;
 
 	@Override//work
 	public Student registerStudent(Student student) {

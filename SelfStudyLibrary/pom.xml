@@ -66,21 +66,6 @@
 <version>2.0.2</version>
 </dependency>
 
-		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-spring-web -->
-<dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-spring-web</artifactId>
-    <version>3.0.0</version>
-</dependency>
-
-
-<!-- https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2 -->
-<dependency>
-    <groupId>org.springframework.security.oauth</groupId>
-    <artifactId>spring-security-oauth2</artifactId>
-    <version>2.5.2.RELEASE</version>
-</dependency>
-
 		
 <dependency>
     <groupId>org.springframework.boot</groupId>

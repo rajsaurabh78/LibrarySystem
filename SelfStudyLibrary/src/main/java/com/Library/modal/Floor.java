@@ -14,6 +14,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,10 +28,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Floor {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator ="floor_seq")
+	@SequenceGenerator(name="floor_seq", sequenceName="floor_seq",allocationSize=100, initialValue=100)
 	private Integer floorNo;
 	
 	@Column(unique = true)
+	@NotBlank(message ="Name should not Blank." )
+	@NotEmpty(message ="Name should not Empty." )
+	@NotNull(message ="Name should not Null." )
 	private String name;
 	
 	@ManyToOne

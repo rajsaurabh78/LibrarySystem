@@ -1,7 +1,5 @@
 package com.Library.modal;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -10,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,9 @@ import lombok.NoArgsConstructor;
 public class Seat {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator ="seat_seq")
+	@SequenceGenerator(name="seat_seq", sequenceName="seat_seq",allocationSize=1, initialValue=1)
 	private Integer seatNo;
 	
 	private Integer floor;
@@ -30,9 +31,6 @@ public class Seat {
 	@JsonIgnore
 	@JoinColumn(name="shiftId")
 	private Shift shift;
-	
-//	@OneToOne( mappedBy = "seat", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-//    @PrimaryKeyJoinColumn
 	
 	@ManyToOne
 	@JsonIgnore

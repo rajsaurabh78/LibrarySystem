@@ -19,6 +19,8 @@ import com.Library.modal.Authority;
 import com.Library.modal.Student;
 import com.Library.repository.AdminRepository;
 import com.Library.repository.studentRepository;
+
+import jakarta.transaction.Transactional;
 @Service
 public class UserUserDetailsService implements UserDetailsService{
 

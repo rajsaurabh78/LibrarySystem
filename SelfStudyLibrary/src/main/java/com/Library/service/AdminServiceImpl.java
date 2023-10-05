@@ -99,10 +99,10 @@ public class AdminServiceImpl implements AdminService{
 					sList.add(st.getStudent());
 				}
 			}
-		if(sList.size()>0) {
-			return sList;
-		}else
-			throw new StudentException("No student found .");
+			if(sList.size()>0) {
+				return sList;
+			}else
+				throw new StudentException("No student found .");
 		}else
 			throw new FloorException("Inviled floor no .");
 		
