@@ -12,7 +12,10 @@ import com.Library.modal.Student;
 
 public interface AdminService {
 	
-	public List<Student> getAllStudent();
+	public List<Admin> allAdmin(Integer pageNo,Integer pageSize);
+	public Admin getAdminById(Integer id);
+	public List<Student> getAllStudentInSortingOrder(String field,String direction);
+	public List<Student> getAllSortedStudentWithPagination(String field,String direction,Integer pageNo,Integer pageSize);
 	public Student getStudentById(Integer id);
 	public Student getStudentBySeatNo(Integer SeatNo);
 	public List<Student> getAllStudentByFloor(Integer floorNo);

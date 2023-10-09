@@ -49,7 +49,7 @@ public abstract class Details {
 	@NotNull(message ="Address should not Null." )
 	private String address;
 	
-	@JsonFormat(pattern = "dd/MM/yyyy")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Past(message = "DOB should be in past.")
 	private LocalDate DOB;
 

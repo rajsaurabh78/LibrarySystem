@@ -1,12 +1,14 @@
 package com.Library.service;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -56,13 +58,37 @@ public class AdminServiceImpl implements AdminService{
 	
 
 	@Override
-	public List<Student> getAllStudent() {
+	public List<Student> getAllStudentInSortingOrder(String field, String direction)  {
+
+		if(direction.toUpperCase().equals("ASC")||direction.toUpperCase().equals("DSC")) {
+			List<Student> sList=studentRepository.findAll(
+				
+				direction.toUpperCase().equals("ASC")? Sort.by(field).ascending() : Sort.by(field).descending());
+			if(sList.isEmpty()) {
+				throw new StudentException("No any student found .");
+			}else 
+				return sList;
+		}else
+			throw new StudentException("Inviled direction .");
 		
-		List<Student> sList=studentRepository.findAll();
-		if(sList.isEmpty()) {
-			throw new StudentException("No any student found .");
-		}else 
-			return sList;
+	}
+	
+	@Override
+	public List<Student> getAllSortedStudentWithPagination(String field, String direction, Integer pageNo,Integer pageSize) {
+		
+		if(direction.toUpperCase().equals("ASC")||direction.toUpperCase().equals("DSC")) {
+			
+			PageRequest p = PageRequest.of(pageNo-1, pageSize, direction.toUpperCase().equals("ASC") ? Sort.by(field).ascending() : Sort.by(field).descending());
+			Page<Student> page= studentRepository.findAll(p);
+			List<Student> students= page.getContent();
+			if(students.isEmpty()) {
+				throw new StudentException("No any student found .");
+			}else 
+				return students;
+			
+		}else
+			throw new StudentException("Inviled direction .");	
+			
 	}
 
 	@Override
@@ -324,12 +350,15 @@ public class AdminServiceImpl implements AdminService{
 	public Floor addFloor(Floor floor,Integer libraryId) {
 		Optional<Library> labs=libraryRepository.findById(libraryId);
 		if(labs.isPresent()) {
-			
+			List<Floor> flrs=new ArrayList<>();
 			floor.setLibrary(labs.get());
+			
 			List<Shift> shifts=floor.getShiftList();
 			for(Shift s:shifts) {
 				s.setFloor(floor);
 			}
+			flrs.add(floor);
+			labs.get().setFloorList(flrs);
 			return floorRepository.save(floor);
 		}else {
 			throw new LibraryException("Inviled library Id .");
@@ -478,6 +507,28 @@ public class AdminServiceImpl implements AdminService{
 		return adminRepository.save(admin);
 		
 	}
+
+	@Override
+	public List<Admin> allAdmin(Integer pageNo,Integer pageSize) {
+			
+			PageRequest p = PageRequest.of(pageNo-1, pageSize);
+			Page<Admin> page= adminRepository.findAll(p);
+			List<Admin> students= page.getContent();
+			if(students.isEmpty()) {
+				throw new StudentException("No any student found .");
+			}else 
+				return students;
+			
+	}
+
+	@Override
+	public Admin getAdminById(Integer id) {
+
+		return adminRepository.findById(id).orElseThrow(()->new AdminException("Inviled Admin Id ."));
+		
+	}
+
+
 
 
 		

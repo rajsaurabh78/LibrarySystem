@@ -40,9 +40,17 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	
-	@GetMapping("/students")
-	public ResponseEntity<List<Student>> getAllStudentController(){
-		List<Student> list=adminService.getAllStudent();
+	@GetMapping("/students/{field}/{dirn}")
+	public ResponseEntity<List<Student>> getAllStudentInSortingOrderController(@Valid @PathVariable("field")String field,@Valid @PathVariable("dirn")String dirn){
+		List<Student> list=adminService.getAllStudentInSortingOrder(field,dirn);
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
+	
+	@GetMapping("/stu/{pageNo}/{pageSize}")
+	public ResponseEntity<List<Student>> getAllSortedStudentWithPaginationController(
+			@Valid @PathVariable("pageNo")Integer pageNo,@Valid @PathVariable("pageSize")Integer pageSize,
+			@Valid @RequestParam String field,@Valid @RequestParam String dirn){
+		List<Student> list=adminService.getAllSortedStudentWithPagination(field, dirn, pageNo, pageSize);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
@@ -63,7 +71,7 @@ public class AdminController {
 		List<Student> list=adminService.getAllStudentByFloor(floorNo);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
-	
+	//frontend pending
 	@GetMapping("/student")
 	public ResponseEntity<List<Seat>> getAllAvalibleSeatsController(){
 		List<Seat> i=adminService.getAllAvalibleSeats();
@@ -93,6 +101,20 @@ public class AdminController {
 		List<StudentDTO> list=adminService.getAllStudentWithNoSeatNo();
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
+	
+	@GetMapping("/admins/{id}")
+	public ResponseEntity<Admin> getAdminByIdController(@Valid @PathVariable("id")Integer id){
+		Admin list=adminService.getAdminById(id);
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
+	
+	@GetMapping("/admin/{pageNo}/{pageSize}")
+	public ResponseEntity<List<Admin>> getAllAdminController(
+			@Valid @PathVariable("pageNo")Integer pageNo,@Valid @PathVariable("pageSize")Integer pageSize){
+		List<Admin> list=adminService.allAdmin(pageNo, pageSize);
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
+	
 	//need
 	@GetMapping("/studentseat/{id}")
 	public ResponseEntity<String> studentSeatAllotementController(@Valid @PathVariable("id")Integer id){
@@ -105,11 +127,12 @@ public class AdminController {
 		String list=adminService.seatAllotementManual(id, shiftName.toUpperCase());
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
-//	@PostMapping("/admin")
-//	public ResponseEntity<Student> registerAdminController(@Valid @RequestBody Student student){
-//		Student list=studentService.registerStudent(student);
-//		return new ResponseEntity<>(list,HttpStatus.CREATED);
-//	}
+
+	@PostMapping("/admin")
+	public ResponseEntity<Admin> addAdminController(@Valid @RequestBody Admin admin){
+		Admin list=adminService.addAdmin(admin);
+		return new ResponseEntity<>(list,HttpStatus.CREATED);
+	}
 	
 	@PutMapping("/upadmin")
 	public ResponseEntity<Admin> updateAdminController(@Valid @RequestBody Admin admin){
