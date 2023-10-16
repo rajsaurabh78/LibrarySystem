@@ -40,13 +40,13 @@ public class Shift {
 	@NotNull(message ="ShiftName should not Null." )
 	private String shiftName;
 	
-	@NotBlank(message ="StartTime should not Blank." )
-	@NotEmpty(message ="StartTime should not Empty." )
+//	@NotBlank(message ="StartTime should not Blank." )
+//	@NotEmpty(message ="StartTime should not Empty." )
 	@NotNull(message ="StartTime should not Null." )
 	private LocalTime startTime;
 	
-	@NotBlank(message ="EndTime should not Blank." )
-	@NotEmpty(message ="EndTime should not Empty." )
+//	@NotBlank(message ="EndTime should not Blank." )
+//	@NotEmpty(message ="EndTime should not Empty." )
 	@NotNull(message ="EndTime should not Null." )
 	private LocalTime endTime;
 	

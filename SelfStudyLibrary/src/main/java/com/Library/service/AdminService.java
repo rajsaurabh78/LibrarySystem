@@ -25,6 +25,8 @@ public interface AdminService {
 	public List<Student> getStudentAreaWise(String address);
 	//cont add 
 	public List<StudentDTO> getAllStudentWithNoSeatNo();
+	public List<Student> allStudentWithNoPayment();
+	public String updatePayment(Integer id);
 	public String studentSeatAllotement(Integer Id);
 	public String seatAllotementManual(Integer id,String shiftName);
 	
@@ -32,6 +34,7 @@ public interface AdminService {
 	public Admin updateAdmin(Admin admin);
 	public String removeAdmin(Integer id);
 	
+	public List<Floor> getFloorbyLid(Integer lId);
 	public Floor addFloor(Floor floor,Integer libraryId);
 	public Floor updateFloorName(Integer floorNo,String newName);
 	public String removeFloor(Integer floorNo);
@@ -39,9 +42,15 @@ public interface AdminService {
 	public Shift addShift(Shift shift,Integer floorNo);
 	public Shift updateShift(Shift shift);
 	public String removeShift(Integer hiftId);
+	public List<Shift>getShiftsByFloor(Integer fId);
 	
+	public List<Seat> getSeatsByShift(Integer shiftId);
 	public Seat addSeat(Integer shiftNo);
 	public String removeStudentSeat(Integer seatNo_Or_UserId);
 	public Library addLibrary (Library library);
+	public List<Library> allLibrary();
+	public String updateLibrary(Integer lId,Library library);
+	public String deleteLibrary(Integer lId);
+	public String deleteSeatById(Integer seatNo);
 
 }

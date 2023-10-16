@@ -12,6 +12,8 @@ public class StudentDTO {
 	private String name;
 	private Integer userId;
 	private Boolean payment;
+	private String wantedShift;
+	private String providedShift;
 	
 }
 

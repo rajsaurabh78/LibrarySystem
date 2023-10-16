@@ -70,16 +70,16 @@ public class StudentServiceImpl implements StudentService{
 	@Override//work
 	public List<Library> getAllDetails() {
 		List<Library> labs=libraryRepository.findAll();
-		for(Library l:labs) {
-			List<Floor> fls=l.getFloorList();
-			for(Floor f:fls) {
-				List<Shift> sft=f.getShiftList();
-				for(Shift s:sft) {
-					s.setSeatList(null);
-				}
-			}
-			
-		}
+//		for(Library l:labs) {
+//			List<Floor> fls=l.getFloorList();
+//			for(Floor f:fls) {
+//				List<Shift> sft=f.getShiftList();
+//				for(Shift s:sft) {
+//					s.setSeatList(null);
+//				}
+//			}
+//			
+//		}
 		if(labs.size()>0) {
 			return labs;
 		}else

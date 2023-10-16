@@ -37,6 +37,24 @@ public class AdminController {
 	@PostMapping("/addlibrary")
 	public ResponseEntity<Library> addLibraryController(@Valid @RequestBody Library library){
 		Library list=adminService.addLibrary(library);
+		return new ResponseEntity<>(list,HttpStatus.CREATED);
+	}	
+	
+	@GetMapping("/librarys")
+	public ResponseEntity<List<Library>> allLibraryController(){
+		List<Library> list=adminService.allLibrary();
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/delLibrary/{lId}")
+	public ResponseEntity<String> deleteLibraryController(@Valid @PathVariable("lId") Integer lId){
+		String list=adminService.deleteLibrary(lId);
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
+	
+	@PutMapping("/library/{lId}")
+	public ResponseEntity<String> updateLibraryController(@Valid @PathVariable("lId")Integer lId ,@Valid @RequestBody Library library){
+		String list=adminService.updateLibrary(lId, library);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	
@@ -72,7 +90,7 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	//frontend pending
-	@GetMapping("/student")
+	@GetMapping("/seats")
 	public ResponseEntity<List<Seat>> getAllAvalibleSeatsController(){
 		List<Seat> i=adminService.getAllAvalibleSeats();
 		return new ResponseEntity<>(i,HttpStatus.OK);
@@ -102,6 +120,18 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
+	@GetMapping("/studentnopay")
+	public ResponseEntity<List<Student>> allStudentWithNoPaymentController(){
+		List<Student> list=adminService.allStudentWithNoPayment();
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
+	
+	@PutMapping("/uppay/{id}")
+	public ResponseEntity<String> updatePaymentController(@Valid @PathVariable("id")Integer id){
+		String list=adminService.updatePayment(id);
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
+	
 	@GetMapping("/admins/{id}")
 	public ResponseEntity<Admin> getAdminByIdController(@Valid @PathVariable("id")Integer id){
 		Admin list=adminService.getAdminById(id);
@@ -112,6 +142,24 @@ public class AdminController {
 	public ResponseEntity<List<Admin>> getAllAdminController(
 			@Valid @PathVariable("pageNo")Integer pageNo,@Valid @PathVariable("pageSize")Integer pageSize){
 		List<Admin> list=adminService.allAdmin(pageNo, pageSize);
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
+	
+	@GetMapping("/floors/{lId}")
+	public ResponseEntity<List<Floor>> getFloorbyLidController(@Valid @PathVariable("lId")Integer lId){
+		List<Floor> list=adminService.getFloorbyLid(lId);
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
+	
+	@GetMapping("/shifts/{fId}")
+	public ResponseEntity<List<Shift>> getShiftsByFloorController(@Valid @PathVariable("fId")Integer fId){
+		List<Shift> list=adminService.getShiftsByFloor(fId);
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
+	
+	@GetMapping("/seats/{shiftId}")
+	public ResponseEntity<List<Seat>> getSeatsByShiftController(@Valid @PathVariable("shiftId")Integer shiftId){
+		List<Seat> list=adminService.getSeatsByShift(shiftId);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
@@ -145,6 +193,12 @@ public class AdminController {
 		String list=adminService.removeAdmin(id);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
+	
+	@DeleteMapping("/seats/{seatNo}")
+	public ResponseEntity<String> deleteSeatByIdController(@Valid @PathVariable("seatNo")Integer seatNo){
+		String list=adminService.deleteSeatById(seatNo);
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
 	
 	@PostMapping("/addfloor/{lId}")
 	public ResponseEntity<Floor> addFloorController(@Valid @RequestBody Floor floor,@Valid @PathVariable("lId") Integer lId){
@@ -183,7 +237,7 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	
-	@PostMapping("/o/{shiftNo}")
+	@PostMapping("/seats/{shiftNo}")
 	public ResponseEntity<Seat> addSeatController(@Valid @PathVariable Integer shiftNo){
 		Seat list=adminService.addSeat(shiftNo);
 		return new ResponseEntity<>(list,HttpStatus.CREATED);

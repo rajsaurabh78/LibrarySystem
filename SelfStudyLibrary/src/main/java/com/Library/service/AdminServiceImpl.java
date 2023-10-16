@@ -117,20 +117,18 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<Student> getAllStudentByFloor(Integer floorNo) {
 
-		List<Seat> seats=seatRepository.findAll();
-		if(seats.isEmpty()) {
+		List<Seat> seats=seatRepository.allSeatsByFloor(floorNo);
+		if(!seats.isEmpty()) {
 			List<Student> sList =new ArrayList<>();
 			for(Seat st:seats) {
-				if(st.getFloor()==floorNo ) {
-					sList.add(st.getStudent());
-				}
+				sList.add(st.getStudent());
 			}
-			if(sList.size()>0) {
+		//	if(sList.size()>0) {
 				return sList;
-			}else
-				throw new StudentException("No student found .");
+		//	}else
+			//	throw new StudentException("No student found .");
 		}else
-			throw new FloorException("Inviled floor no .");
+			throw new FloorException("Inviled floor no ./ No data found.");
 		
 	}
 
@@ -213,7 +211,7 @@ public class AdminServiceImpl implements AdminService{
 		else {
 			for(Student stu:sList) {
 				if(stu.getPayment()==true&&stu.getSeats().size()==0 ){
-					dto.add(new StudentDTO(stu.getName(), stu.getUserId(),stu.getPayment()));
+					dto.add(new StudentDTO(stu.getName(), stu.getUserId(),stu.getPayment(),stu.getWantedShift(),stu.getProvidedShift()));		
 				}
 			}
 			if(dto.isEmpty()) {
@@ -256,7 +254,7 @@ public class AdminServiceImpl implements AdminService{
 					seat.setStudent(stu);
 					sl.add(seat);
 					stu.setSeats(sl);
-					stu.setProvidedShift(stu.getProvidedShift()+shiftName+",");
+					stu.setProvidedShift(shiftName+",");
 					studentRepository.save(stu);			
 					return "Registered in shift."+seat.getShift().getShiftName() ;
 				}else
@@ -300,7 +298,11 @@ public class AdminServiceImpl implements AdminService{
 					List<Seat> sl=new ArrayList<>();
 					seat.setStudent(stu);
 					sl.add(seat);
-					stu.setProvidedShift(stu.getProvidedShift()+shiftName+",");
+					if(stu.getProvidedShift()==null ) {
+						stu.setProvidedShift(shiftName+",");
+					}else {
+						stu.setProvidedShift(stu.getProvidedShift()+shiftName+",");
+					}
 					stu.setSeats(sl);
 					studentRepository.save(stu);			
 					return "Registered in shift."+seat.getShift().getShiftName() ;
@@ -467,6 +469,7 @@ public class AdminServiceImpl implements AdminService{
 			if(opt.isPresent() && opt.get().getStudent()!=null ){
 				Seat st=opt.get();
 				st.setStudent(null);
+				st.getStudent().setProvidedShift(null);
 				seatRepository.save(st);	
 			
 			return "Student removed successfully from seat no."+seatNo_Or_UserId;
@@ -479,8 +482,9 @@ public class AdminServiceImpl implements AdminService{
 					for(Seat s:seat) {
 						s.setStudent(null);
 					}
+					st.setProvidedShift(null);
 					seatRepository.saveAll(seat);	
-					return "Use Successfully removed  from all seats with User Id :- "+seatNo_Or_UserId;
+					return "User Successfully removed  from all seats with User Id :- "+seatNo_Or_UserId;
 				}else
 					throw new SeatException("Inviled UserId :- "+seatNo_Or_UserId);
 		}
@@ -528,9 +532,122 @@ public class AdminServiceImpl implements AdminService{
 		
 	}
 
+	@Override
+	public List<Library> allLibrary() {
 
+		List<Library> libs=libraryRepository.findAll();
+		if(libs.size()>0) {
+			return libs;
+		}else
+			throw new LibraryException("No data found.");
+	}
 
-
+	@Override
+	public String updateLibrary(Integer lId,Library library) {
 		
+		Optional<Library> opt=libraryRepository.findById(lId);
+		if(opt.isPresent()) {
+			Library lb=opt.get();
+			lb.setName(library.getName());
+			lb.setAddress(library.getAddress());
+			libraryRepository.save(lb);
+			return "Updated";
+		}else
+			throw new LibraryException("Inviled library id");	
+		
+	}
+
+	@Override
+	public String deleteLibrary(Integer lId) {
+		
+		Optional<Library> opt=libraryRepository.findById(lId);
+		if(opt.isPresent()) {
+			libraryRepository.delete(opt.get());
+			return "Deleted";
+		}else
+			throw new LibraryException("Inviled library id");	
+	}
+
+	@Override
+	public List<Floor> getFloorbyLid(Integer lId) {
+		
+		Optional<Library> opt=libraryRepository.findById(lId);
+		if(opt.isPresent()) {
+			return opt.get().getFloorList();
+		}else
+			throw new LibraryException("Inviled library id");
+		
+	}
+
+	@Override
+	public List<Shift> getShiftsByFloor(Integer fId) {
+		
+		Optional<Floor> opt=floorRepository.findById(fId);
+		if(opt.isPresent()) {
+			return opt.get().getShiftList();
+		}else
+			throw new FloorException("Inviled Floor id");
+		
+		
+	}
+
+	@Override
+	public List<Seat> getSeatsByShift(Integer shiftId) {
+
+		Optional<Shift> opt=shiftRepository.findById(shiftId);
+		if(opt.isPresent()) {
+			return opt.get().getSeatList();
+		}else
+			throw new ShiftException("Inviled Shift id");
+		
+	}
+
+	@Override
+	public String deleteSeatById(Integer seatNo) {
+
+		Optional<Seat> opt=seatRepository.findById(seatNo);
+		if(opt.isPresent()) {
+			Student st=opt.get().getStudent();
+			if(st==null) {
+				seatRepository.delete(opt.get());
+				return "Deleted.";
+			}else throw new SeatException("Seat is not empty."); 
+		}else
+			throw new SeatException("Inviled Seat no. .");
+	}
+
+	@Override
+	public List<Student> allStudentWithNoPayment() {
+		
+		List<Student> sList=new ArrayList<>();
+		List<Student> stud=studentRepository.findAll();
+		if(!stud.isEmpty()) {
+			for(Student s:stud) {
+				if(s.getPayment()==false) {
+					sList.add(s);
+				}		
+			}
+		}else {
+			throw new StudentException("Empty List");
+		}
+		if(!sList.isEmpty()) {
+			return sList;
+		}else
+			throw new StudentException("Empty List");
+		
+	}
+
+	@Override
+	public String updatePayment(Integer id) {
+		
+		Optional<Student> opt=studentRepository.findById(id);
+		if(opt.isPresent()) {
+			opt.get().setPayment(true);	
+			studentRepository.save(opt.get());
+			return "Payment updated .";
+		}else
+			throw new StudentException("Inviled userId .");
+		
+	}
 
 }
