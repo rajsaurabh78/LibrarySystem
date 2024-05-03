@@ -1,14 +1,10 @@
 
 # LibrarySystem
 
-![self-study-library-furniture-tables-500x500](https://github.com/rajsaurabh78/LibrarySystem/assets/108000350/35ce9231-1b1d-4c84-a9bb-52d7237ac4e7)
-
-
-
-
 This application helps admin to enroll students efficiently, create floor under a library inside floor create shift , under a shift add many seats and allocates the seats in one or more shifts to students.
 
 
+![self-study-library-furniture-tables-500x500](https://github.com/rajsaurabh78/LibrarySystem/assets/108000350/35ce9231-1b1d-4c84-a9bb-52d7237ac4e7)
 
 
 ### Tech Stack
