@@ -30,7 +30,7 @@ There are two user of this Application:-
 ------------
 Roles for Administrator :
 
-   1. Add library, floor, shift(Shift name should be First, Second or Third), seat, admin and student.
+   1. Add library, floor, shift (Shift name should be First , Second or Third), seat, admin and student.
    2. Update all data.
    3. Delete  a library / floor / shift / seat /student / admin.
    4. Search information about a student/admin/library/floor/shift/seat.
