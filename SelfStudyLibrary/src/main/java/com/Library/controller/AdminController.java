@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Library.DTO.ShiftDTO;
 import com.Library.DTO.StudentDTO;
 import com.Library.modal.Admin;
 import com.Library.modal.Floor;
@@ -176,6 +177,16 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 
+	
+//		{
+//		  "name":"Raj",
+//		  "email":"raj@gmail.com",
+//		  "password":"Raj@12345",
+//		  "address":"Hajipur",
+//		  "DOB":"2004-10-20",
+//		  "mobile":"9912343434"
+//		}
+	
 	@PostMapping("/admin")
 	public ResponseEntity<Admin> addAdminController(@Valid @RequestBody Admin admin){
 		Admin list=adminService.addAdmin(admin);
@@ -219,8 +230,8 @@ public class AdminController {
 	}	
 	
 	@PostMapping("/addshift/{floorNo}")
-	public ResponseEntity<Shift> addShiftController(@Valid @RequestBody Shift Shift,@Valid @PathVariable("floorNo") Integer floorNo){
-		Shift list=adminService.addShift(Shift,floorNo);
+	public ResponseEntity<Shift> addShiftController(@Valid @RequestBody ShiftDTO ShiftDto,@Valid @PathVariable("floorNo") Integer floorNo){
+		Shift list=adminService.addShift(ShiftDto,floorNo);
 		return new ResponseEntity<>(list,HttpStatus.CREATED);
 	}	
 	

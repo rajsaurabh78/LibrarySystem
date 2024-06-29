@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.Library.DTO.ShiftDTO;
 import com.Library.DTO.StudentDTO;
 import com.Library.exception.AdminException;
 import com.Library.exception.FloorException;
@@ -396,18 +397,26 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public Shift addShift(Shift shift,Integer floorNo) {	
+	public Shift addShift(ShiftDTO shiftDto,Integer floorNo) {	
 		Optional<Floor> opt=floorRepository.findById(floorNo);
+		Shift shift =new Shift();
+		shift.setShiftName(shiftDto.getShiftName());
+		shift.setStartTime(shiftDto.getStartTime());
+		shift.setEndTime(shiftDto.getEndTime());
 		List<Shift> sl=new ArrayList<>();
 		sl.add(shift);
 		if(opt.isPresent()) {
 			Floor fl=opt.get();
 			fl.setShiftList(sl);
 			shift.setFloor(fl);
-			List<Seat> sList=shift.getSeatList();
-			for(Seat i:sList) {				i.setFloor(floorNo);
-				i.setShift(shift);
+			List<Seat> sList=new ArrayList<>();
+			for(int i=0;i<shiftDto.getNoOfSeats();i++) {
+				Seat s=new Seat();
+				s.setFloor(floorNo);
+				s.setShift(shift);
+				sList.add(s);
 			}
+			shift.setSeatList(sList);
 			return shiftRepository.save(shift);
 		}else
 			throw new FloorException("Inviled floorNo .");

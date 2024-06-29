@@ -2,6 +2,7 @@ package com.Library.service;
 
 import java.util.List;
 
+import com.Library.DTO.ShiftDTO;
 import com.Library.DTO.StudentDTO;
 import com.Library.modal.Admin;
 import com.Library.modal.Floor;
@@ -39,7 +40,7 @@ public interface AdminService {
 	public Floor updateFloorName(Integer floorNo,String newName);
 	public String removeFloor(Integer floorNo);
 	
-	public Shift addShift(Shift shift,Integer floorNo);
+	public Shift addShift(ShiftDTO shiftDto,Integer floorNo);
 	public Shift updateShift(Shift shift);
 	public String removeShift(Integer hiftId);
 	public List<Shift>getShiftsByFloor(Integer fId);
