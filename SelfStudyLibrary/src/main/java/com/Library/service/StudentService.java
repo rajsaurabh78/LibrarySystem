@@ -2,7 +2,8 @@ package com.Library.service;
 
 import java.util.List;
 
-import com.Library.modal.Admin;
+import javax.security.auth.login.LoginException;
+
 import com.Library.modal.Library;
 import com.Library.modal.Shift;
 import com.Library.modal.Student;
@@ -12,7 +13,7 @@ public interface StudentService {
 	public Student registerStudent(Student student);
 	public List<Shift> getAllShiftByFloorNo(Integer floorNo);
 	public List<Library> getAllDetails();
-	public Student updateStudent(Student student);
-	public Student getOwnProfile();
+	public Student updateStudent(Student student)throws LoginException;
+	public Student getOwnProfile()throws LoginException;
 //	public Admin getAdminByMobile(String mobile);
 }

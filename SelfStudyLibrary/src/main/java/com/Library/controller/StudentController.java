@@ -2,6 +2,8 @@ package com.Library.controller;
 
 import java.util.List;
 
+import javax.security.auth.login.LoginException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +50,14 @@ public class StudentController {
 		
 		List<Library> sft=studentService.getAllDetails();
 		return new ResponseEntity<>(sft,HttpStatus.OK);
+		
+	}
+	
+	@GetMapping("/profile")
+	public ResponseEntity<Student> getOwnProfileController() throws LoginException{
+		
+		Student st=studentService.getOwnProfile();
+		return new ResponseEntity<>(st,HttpStatus.OK);
 		
 	}
 

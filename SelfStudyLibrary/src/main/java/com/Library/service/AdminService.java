@@ -2,6 +2,7 @@ package com.Library.service;
 
 import java.util.List;
 
+import com.Library.DTO.SeatDTO;
 import com.Library.DTO.ShiftDTO;
 import com.Library.DTO.StudentDTO;
 import com.Library.modal.Admin;
@@ -20,7 +21,7 @@ public interface AdminService {
 	public Student getStudentById(Integer id);
 	public Student getStudentBySeatNo(Integer SeatNo);
 	public List<Student> getAllStudentByFloor(Integer floorNo);
-	public List<Seat> getAllAvalibleSeats();
+	public List<SeatDTO> getAllAvalibleSeats();
 	public List<Student> getAllStudentShiftWise(Integer shiftNo);
 	public String removeStudent(Integer userId);
 	public List<Student> getStudentAreaWise(String address);
@@ -46,7 +47,7 @@ public interface AdminService {
 	public List<Shift>getShiftsByFloor(Integer fId);
 	
 	public List<Seat> getSeatsByShift(Integer shiftId);
-	public Seat addSeat(Integer shiftNo);
+	public List<Seat> addSeat(Integer shiftNo,Integer noOfSeats);
 	public String removeStudentSeat(Integer seatNo_Or_UserId);
 	public Library addLibrary (Library library);
 	public List<Library> allLibrary();

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Library.DTO.SeatDTO;
 import com.Library.DTO.ShiftDTO;
 import com.Library.DTO.StudentDTO;
 import com.Library.modal.Admin;
@@ -24,7 +25,6 @@ import com.Library.modal.Seat;
 import com.Library.modal.Shift;
 import com.Library.modal.Student;
 import com.Library.service.AdminService;
-import com.Library.service.StudentService;
 
 import jakarta.validation.Valid;
 
@@ -59,17 +59,17 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	
-	@GetMapping("/students/{field}/{dirn}")
-	public ResponseEntity<List<Student>> getAllStudentInSortingOrderController(@Valid @PathVariable("field")String field,@Valid @PathVariable("dirn")String dirn){
-		List<Student> list=adminService.getAllStudentInSortingOrder(field,dirn);
+	@GetMapping("/students")
+	public ResponseEntity<List<Student>> getAllStudentInSortingOrderController(@Valid @RequestParam("field")String field,@Valid @RequestParam("direction")String direction){
+		List<Student> list=adminService.getAllStudentInSortingOrder(field,direction);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
 	@GetMapping("/stu/{pageNo}/{pageSize}")
 	public ResponseEntity<List<Student>> getAllSortedStudentWithPaginationController(
 			@Valid @PathVariable("pageNo")Integer pageNo,@Valid @PathVariable("pageSize")Integer pageSize,
-			@Valid @RequestParam String field,@Valid @RequestParam String dirn){
-		List<Student> list=adminService.getAllSortedStudentWithPagination(field, dirn, pageNo, pageSize);
+			@Valid @RequestParam String field,@Valid @RequestParam String direction){
+		List<Student> list=adminService.getAllSortedStudentWithPagination(field, direction, pageNo, pageSize);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
@@ -92,8 +92,8 @@ public class AdminController {
 	}
 	//frontend pending
 	@GetMapping("/seats")
-	public ResponseEntity<List<Seat>> getAllAvalibleSeatsController(){
-		List<Seat> i=adminService.getAllAvalibleSeats();
+	public ResponseEntity<List<SeatDTO>> getAllAvalibleSeatsController(){
+		List<SeatDTO> i=adminService.getAllAvalibleSeats();
 		return new ResponseEntity<>(i,HttpStatus.OK);
 	}
 	
@@ -171,8 +171,8 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
-	@GetMapping("/studentseats/{id}/{shiftName}")
-	public ResponseEntity<String> seatAllotementManualController(@Valid @PathVariable("id")Integer id,@Valid @PathVariable("shiftName")String shiftName){
+	@GetMapping("/studentseats/{id}")
+	public ResponseEntity<String> seatAllotementManualController(@Valid @PathVariable("id")Integer id,@Valid @RequestParam("shiftName")String shiftName){
 		String list=adminService.seatAllotementManual(id, shiftName.toUpperCase());
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
@@ -249,8 +249,8 @@ public class AdminController {
 	}	
 	
 	@PostMapping("/seats/{shiftNo}")
-	public ResponseEntity<Seat> addSeatController(@Valid @PathVariable Integer shiftNo){
-		Seat list=adminService.addSeat(shiftNo);
+	public ResponseEntity<List<Seat>> addSeatController(@Valid @PathVariable("shiftNo") Integer shiftNo,@Valid @RequestParam("noOfSeats")Integer noOfSeats){
+		List<Seat> list=adminService.addSeat(shiftNo,noOfSeats);
 		return new ResponseEntity<>(list,HttpStatus.CREATED);
 	}
 	

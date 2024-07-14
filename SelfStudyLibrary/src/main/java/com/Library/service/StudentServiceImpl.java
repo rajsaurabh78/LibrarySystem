@@ -1,23 +1,24 @@
 package com.Library.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import javax.security.auth.login.LoginException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.Library.exception.LibraryException;
 import com.Library.exception.ShiftException;
-import com.Library.exception.StudentException;
 import com.Library.modal.Authority;
 import com.Library.modal.Floor;
 import com.Library.modal.Library;
 import com.Library.modal.Shift;
 import com.Library.modal.Student;
-import com.Library.repository.AdminRepository;
 import com.Library.repository.FloorRepository;
 import com.Library.repository.LibraryRepository;
 import com.Library.repository.studentRepository;
@@ -88,27 +89,45 @@ public class StudentServiceImpl implements StudentService{
 	}
 
 	@Override//work
-	public Student updateStudent(Student student) {
+	public Student updateStudent(Student st) throws LoginException {
 		
-		Optional<Student> opt=studentRepository.findById(student.getUserId());
-		if(opt.isEmpty()) {
-			throw new StudentException("Inviled User id .");
-		}else {
-			Student st=opt.get();
-			st.setAddress(student.getAddress());
-			st.setEmail(student.getEmail());
-			st.setName(student.getName());
-			st.setDOB(student.getDOB());
-			st.setWantedShift(student.getWantedShift().toUpperCase());
-			st.setPassword(passwordEncoder.encode(student.getPassword()));
-			return studentRepository.save(st);
-		}
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Student student = studentRepository.findByEmail(authentication.getName())
+				.orElseThrow(() -> new LoginException("Please Login First"));
+		
+		
+		System.out.println(student.getEmail());
+			if(st.getAddress()!=null) {
+				student.setAddress(st.getAddress());
+			}
+			if(st.getEmail()!=null) {
+				student.setEmail(st.getEmail());
+			}
+			if(st.getMobile()!=null) {
+				student.setMobile(st.getMobile());
+			}
+			if(st.getName()!=null) {
+				student.setName(st.getName());
+			}
+			if(st.getDOB()!=null) {
+				student.setDOB(st.getDOB());
+			}
+			if(st.getWantedShift()!=null) {
+				student.setWantedShift(st.getWantedShift().toUpperCase());
+			}
+			if(st.getPassword()!=null) {
+				student.setPassword(passwordEncoder.encode(student.getPassword()));
+			}
+			return studentRepository.save(student);
 	}
 
 	@Override
-	public Student getOwnProfile() {
-		// TODO Auto-generated method stub
-		return null;
+	public Student getOwnProfile() throws LoginException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Student st = studentRepository.findByEmail(authentication.getName())
+				.orElseThrow(() -> new LoginException("Please Login First"));
+		System.out.println(st.getEmail());
+		return st;
 	}
 
 //	@Override
