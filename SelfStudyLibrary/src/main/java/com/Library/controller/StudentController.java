@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Library.DTO.UpdateDetailsDTO;
 import com.Library.modal.Library;
 import com.Library.modal.Shift;
 import com.Library.modal.Student;
@@ -37,10 +37,10 @@ public class StudentController {
 		
 	}
 	
-	@PutMapping("/student")
-	public ResponseEntity<Student> updateStudentController(@Valid @RequestBody Student student){
+	@PatchMapping("/student")
+	public ResponseEntity<Student> updateStudentController(@Valid @RequestBody UpdateDetailsDTO updateDetailsDTO) throws LoginException{
 		
-		Student stu=studentService.registerStudent(student);
+		Student stu=studentService.updateStudent(updateDetailsDTO);
 		return new ResponseEntity<>(stu,HttpStatus.OK);
 		
 	}

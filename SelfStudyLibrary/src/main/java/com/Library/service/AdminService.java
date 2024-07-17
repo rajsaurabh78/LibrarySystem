@@ -2,9 +2,14 @@ package com.Library.service;
 
 import java.util.List;
 
+import javax.security.auth.login.LoginException;
+
 import com.Library.DTO.SeatDTO;
 import com.Library.DTO.ShiftDTO;
 import com.Library.DTO.StudentDTO;
+import com.Library.DTO.UpdateDetailsDTO;
+import com.Library.DTO.UpdateLibraryDTO;
+import com.Library.DTO.UpdateShiftDTO;
 import com.Library.modal.Admin;
 import com.Library.modal.Floor;
 import com.Library.modal.Library;
@@ -33,7 +38,7 @@ public interface AdminService {
 	public String seatAllotementManual(Integer id,String shiftName);
 	
 	public Admin addAdmin(Admin admin);
-	public Admin updateAdmin(Admin admin);
+	public Admin updateAdmin(UpdateDetailsDTO updateDetailsDTO)throws LoginException;
 	public String removeAdmin(Integer id);
 	
 	public List<Floor> getFloorbyLid(Integer lId);
@@ -42,7 +47,7 @@ public interface AdminService {
 	public String removeFloor(Integer floorNo);
 	
 	public Shift addShift(ShiftDTO shiftDto,Integer floorNo);
-	public Shift updateShift(Shift shift);
+	public Shift updateShift(UpdateShiftDTO updateShiftDTO);
 	public String removeShift(Integer hiftId);
 	public List<Shift>getShiftsByFloor(Integer fId);
 	
@@ -51,7 +56,7 @@ public interface AdminService {
 	public String removeStudentSeat(Integer seatNo_Or_UserId);
 	public Library addLibrary (Library library);
 	public List<Library> allLibrary();
-	public String updateLibrary(Integer lId,Library library);
+	public String updateLibrary(Integer lId,UpdateLibraryDTO updateLibraryDTO);
 	public String deleteLibrary(Integer lId);
 	public String deleteSeatById(Integer seatNo);
 

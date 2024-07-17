@@ -2,11 +2,14 @@ package com.Library.controller;
 
 import java.util.List;
 
+import javax.security.auth.login.LoginException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Library.DTO.SeatDTO;
 import com.Library.DTO.ShiftDTO;
 import com.Library.DTO.StudentDTO;
+import com.Library.DTO.UpdateDetailsDTO;
+import com.Library.DTO.UpdateLibraryDTO;
+import com.Library.DTO.UpdateShiftDTO;
 import com.Library.modal.Admin;
 import com.Library.modal.Floor;
 import com.Library.modal.Library;
@@ -53,9 +59,9 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
-	@PutMapping("/library/{lId}")
-	public ResponseEntity<String> updateLibraryController(@Valid @PathVariable("lId")Integer lId ,@Valid @RequestBody Library library){
-		String list=adminService.updateLibrary(lId, library);
+	@PatchMapping("/library/{lId}")
+	public ResponseEntity<String> updateLibraryController(@Valid @PathVariable("lId")Integer lId ,@Valid @RequestBody UpdateLibraryDTO updateLibraryDTO){
+		String list=adminService.updateLibrary(lId, updateLibraryDTO);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	
@@ -193,9 +199,9 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/upadmin")
-	public ResponseEntity<Admin> updateAdminController(@Valid @RequestBody Admin admin){
-		Admin list=adminService.updateAdmin(admin);
+	@PatchMapping("/upadmin")
+	public ResponseEntity<Admin> updateAdminController(@Valid @RequestBody UpdateDetailsDTO updateDetailsDTO) throws LoginException{
+		Admin list=adminService.updateAdmin(updateDetailsDTO);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	
@@ -217,9 +223,9 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.CREATED);
 	}	
 	
-	@PutMapping("/upfloor/{floorNo}/{newName}")
-	public ResponseEntity<Floor> updateFloorNameController(@Valid @PathVariable("floorNo") Integer floorNo ,@Valid @PathVariable("newName") String newName){
-		Floor list=adminService.updateFloorName(floorNo, newName);
+	@PutMapping("/upfloor/{floorNo}")
+	public ResponseEntity<Floor> updateFloorNameController(@Valid @PathVariable("floorNo") Integer floorNo ,@Valid @RequestParam("name") String name){
+		Floor list=adminService.updateFloorName(floorNo, name);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	
@@ -236,9 +242,9 @@ public class AdminController {
 	}	
 	
 	
-	@PutMapping("/upshift")
-	public ResponseEntity<Shift> updateShiftController(@Valid @RequestBody Shift shift){
-		Shift list=adminService.updateShift(shift);
+	@PatchMapping("/upshift")
+	public ResponseEntity<Shift> updateShiftController(@Valid @RequestBody UpdateShiftDTO updateShiftDTO){
+		Shift list=adminService.updateShift(updateShiftDTO);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
 	//check one last

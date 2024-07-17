@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.Library.DTO.UpdateDetailsDTO;
 import com.Library.exception.LibraryException;
 import com.Library.exception.ShiftException;
 import com.Library.modal.Authority;
@@ -89,34 +90,32 @@ public class StudentServiceImpl implements StudentService{
 	}
 
 	@Override//work
-	public Student updateStudent(Student st) throws LoginException {
+	public Student updateStudent(UpdateDetailsDTO updateDetailsDTO) throws LoginException {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Student student = studentRepository.findByEmail(authentication.getName())
 				.orElseThrow(() -> new LoginException("Please Login First"));
 		
-		
-		System.out.println(student.getEmail());
-			if(st.getAddress()!=null) {
-				student.setAddress(st.getAddress());
+			if(updateDetailsDTO.getAddress()!=null) {
+				student.setAddress(updateDetailsDTO.getAddress());
 			}
-			if(st.getEmail()!=null) {
-				student.setEmail(st.getEmail());
+			if(updateDetailsDTO.getEmail()!=null) {
+				student.setEmail(updateDetailsDTO.getEmail());
 			}
-			if(st.getMobile()!=null) {
-				student.setMobile(st.getMobile());
+			if(updateDetailsDTO.getMobile()!=null) {
+				student.setMobile(updateDetailsDTO.getMobile());
 			}
-			if(st.getName()!=null) {
-				student.setName(st.getName());
+			if(updateDetailsDTO.getName()!=null) {
+				student.setName(updateDetailsDTO.getName());
 			}
-			if(st.getDOB()!=null) {
-				student.setDOB(st.getDOB());
+			if(updateDetailsDTO.getDOB()!=null) {
+				student.setDOB(updateDetailsDTO.getDOB());
 			}
-			if(st.getWantedShift()!=null) {
-				student.setWantedShift(st.getWantedShift().toUpperCase());
+			if(updateDetailsDTO.getWantedShift()!=null) {
+				student.setWantedShift(updateDetailsDTO.getWantedShift().toUpperCase());
 			}
-			if(st.getPassword()!=null) {
-				student.setPassword(passwordEncoder.encode(student.getPassword()));
+			if(updateDetailsDTO.getPassword()!=null) {
+				student.setPassword(passwordEncoder.encode(updateDetailsDTO.getPassword()));
 			}
 			return studentRepository.save(student);
 	}

@@ -4,16 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.security.auth.login.LoginException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.Library.DTO.SeatDTO;
 import com.Library.DTO.ShiftDTO;
 import com.Library.DTO.StudentDTO;
+import com.Library.DTO.UpdateDetailsDTO;
+import com.Library.DTO.UpdateLibraryDTO;
+import com.Library.DTO.UpdateShiftDTO;
 import com.Library.exception.AdminException;
 import com.Library.exception.FloorException;
 import com.Library.exception.LibraryException;
@@ -301,21 +308,32 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public Admin updateAdmin(Admin admin) {
+	public Admin updateAdmin(UpdateDetailsDTO updateDetailsDTO) throws LoginException {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Admin admin = adminRepository.findByMobile(authentication.getName())
+				.orElseThrow(() -> new LoginException("Please Login First"));
 
-		Optional<Admin> opt=adminRepository.findById(admin.getId());
-		if(opt.isPresent()) {
-			Admin ad=opt.get();
-			ad.setEmail(admin.getEmail());
-			ad.setAddress(admin.getAddress());
-			ad.setMobile(admin.getMobile());
-			ad.setName(admin.getName());
-			ad.setPassword(passwordEncoder.encode(admin.getPassword()));
-			ad.setDOB(admin.getDOB());			
-			return adminRepository.save(ad);
+		if(updateDetailsDTO.getAddress()!=null) {
+			admin.setAddress(updateDetailsDTO.getAddress());
 		}
-		else
-			throw new AdminException("Inviled admin Id .");
+		if(updateDetailsDTO.getEmail()!=null) {
+			admin.setEmail(updateDetailsDTO.getEmail());
+		}
+		if(updateDetailsDTO.getMobile()!=null) {
+			admin.setMobile(updateDetailsDTO.getMobile());
+		}
+		if(updateDetailsDTO.getName()!=null) {
+			admin.setName(updateDetailsDTO.getName());
+		}
+		if(updateDetailsDTO.getDOB()!=null) {
+			admin.setDOB(updateDetailsDTO.getDOB());
+		}
+		if(updateDetailsDTO.getPassword()!=null) {
+			admin.setPassword(passwordEncoder.encode(updateDetailsDTO.getPassword()));
+		}		
+		
+		return adminRepository.save(admin);
 	}
 
 	@Override
@@ -351,14 +369,11 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public Floor updateFloorName(Integer floorNo,String newName) {
 		
-		Optional<Floor> opt=floorRepository.findById(floorNo);
-		if(opt.isEmpty()) {
-			throw new FloorException("Inviled floorNo .");
-		}else {
-			Floor fl=opt.get();
-			fl.setName(newName);
-			return floorRepository.save(fl);
-		}
+		Floor floor=floorRepository.findById(floorNo)
+				.orElseThrow(()-> new FloorException("Inviled floorNo ."));
+		floor.setName(newName);
+		return floorRepository.save(floor);
+		
 	}
 
 	@Override
@@ -401,18 +416,22 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public Shift updateShift(Shift shift) {
+	public Shift updateShift(UpdateShiftDTO updateShiftDTO) {
 		
-		Optional<Shift> opt=shiftRepository.findById(shift.getShiftId());
-		if(opt.isPresent()) {
-			Shift sft=opt.get();
-			sft.setShiftName(shift.getShiftName());
-			sft.setEndTime(shift.getEndTime());
-			sft.setStartTime(shift.getStartTime());
-			return shiftRepository.save(sft);
+		Shift shift=shiftRepository.findById(updateShiftDTO.getShiftId())
+				.orElseThrow(()-> new ShiftException("Inviled shift Id ."));
+		
+		if(updateShiftDTO.getShiftName()!=null) {
+			shift.setShiftName(updateShiftDTO.getShiftName());
 		}
-		else
-			throw new ShiftException("Inviled shift Id .");
+		if(updateShiftDTO.getStartTime()!=null) {
+			shift.setStartTime(updateShiftDTO.getStartTime());
+		}
+		if(updateShiftDTO.getEndTime()!=null) {
+			shift.setEndTime(updateShiftDTO.getEndTime());
+		}
+		
+		return shiftRepository.save(shift);	
 		
 	}
 
@@ -453,19 +472,14 @@ public class AdminServiceImpl implements AdminService{
 		
 		Optional<Student> op=studentRepository.findById(seatNo_Or_UserId);
 		if(op.isEmpty()) {
-			Optional<Seat> opt=seatRepository.findById(seatNo_Or_UserId);
-			if(opt.isPresent() && opt.get().getStudent()!=null ){
-				Seat st=opt.get();
-				st.setStudent(null);
-				st.getStudent().setProvidedShift(null);
-				seatRepository.save(st);	
-			
+			Seat seat=seatRepository.findById(seatNo_Or_UserId)
+					.orElseThrow(()->new SeatException("Inviled seatNo :- "+seatNo_Or_UserId));
+			seat.setStudent(null);
+			seatRepository.save(seat);
 			return "Student removed successfully from seat no."+seatNo_Or_UserId;
-			}else
-				throw new SeatException("Inviled seatNo :- "+seatNo_Or_UserId);
 		}else {
 				Student st=op.get();
-				if(st.getSeats().size()>0 ) {
+				if(st.getSeats().size()>0) {
 					List<Seat> seat=st.getSeats();
 					for(Seat s:seat) {
 						s.setStudent(null);
@@ -531,15 +545,15 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public String updateLibrary(Integer lId,Library library) {
+	public String updateLibrary(Integer lId,UpdateLibraryDTO updateLibraryDTO) {
 		
 		Library lib=libraryRepository.findById(lId)
 				.orElseThrow(()->new LibraryException("Inviled library id"));
-		if(library.getName()!=null) {
-			lib.setName(library.getName());
+		if(updateLibraryDTO.getName()!=null) {
+			lib.setName(updateLibraryDTO.getName());
 		}
-		if(library.getAddress()!=null) {
-			lib.setAddress(library.getAddress());
+		if(updateLibraryDTO.getAddress()!=null) {
+			lib.setAddress(updateLibraryDTO.getAddress());
 		}
 			
 		libraryRepository.save(lib);
