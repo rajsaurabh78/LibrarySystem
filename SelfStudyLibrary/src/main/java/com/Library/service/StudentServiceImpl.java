@@ -18,6 +18,7 @@ import com.Library.exception.ShiftException;
 import com.Library.modal.Authority;
 import com.Library.modal.Floor;
 import com.Library.modal.Library;
+import com.Library.modal.Role;
 import com.Library.modal.Shift;
 import com.Library.modal.Student;
 import com.Library.repository.FloorRepository;
@@ -44,10 +45,10 @@ public class StudentServiceImpl implements StudentService{
 		
 		student.setPassword(passwordEncoder.encode(student.getPassword()));
 		student.setProvidedShift(null);
-		student.setWantedShift(student.getWantedShift().toUpperCase() );
 		List<Authority> auths= new ArrayList<>();
-		auths.add(new Authority(null,"ROLE_STUDENT", student,null));
-		auths.add(new Authority(null,"ROLE_USER", student,null));
+		auths.add(new Authority(null, null, student, null));
+		auths.add(new Authority(null,Role.ROLE_STUDENT, student,null));
+		auths.add(new Authority(null,Role.ROLE_USER, student,null));
 		student.setAuthority(auths);
 		return studentRepository.save(student);
 	}
@@ -112,7 +113,7 @@ public class StudentServiceImpl implements StudentService{
 				student.setDOB(updateDetailsDTO.getDOB());
 			}
 			if(updateDetailsDTO.getWantedShift()!=null) {
-				student.setWantedShift(updateDetailsDTO.getWantedShift().toUpperCase());
+				student.setWantedShift(updateDetailsDTO.getWantedShift());
 			}
 			if(updateDetailsDTO.getPassword()!=null) {
 				student.setPassword(passwordEncoder.encode(updateDetailsDTO.getPassword()));

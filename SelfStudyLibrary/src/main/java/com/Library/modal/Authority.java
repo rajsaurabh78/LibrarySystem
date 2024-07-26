@@ -3,14 +3,13 @@ package com.Library.modal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +27,8 @@ public class Authority {
 	@SequenceGenerator(name="authority_seq", sequenceName="authority_seq",allocationSize=1, initialValue=500)
 	private Integer id;
 	
-	private String name;
+	@Enumerated(EnumType.STRING)
+	private Role role;
 	
 	@ManyToOne
 	@JsonIgnore

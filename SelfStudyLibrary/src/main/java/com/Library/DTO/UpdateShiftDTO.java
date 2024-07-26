@@ -2,8 +2,10 @@ package com.Library.DTO;
 
 import java.time.LocalTime;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import com.Library.modal.ShiftName;
+
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +19,8 @@ public class UpdateShiftDTO {
 	@NotNull(message ="ShiftName should not Null." )
 	private Integer shiftId;
 	
-	private String shiftName;
+	@Enumerated(EnumType.STRING)
+	private ShiftName shiftName;
 	
 	private LocalTime startTime;
 	

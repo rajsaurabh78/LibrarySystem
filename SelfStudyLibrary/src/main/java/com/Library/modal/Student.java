@@ -5,6 +5,8 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,10 +36,9 @@ public class Student extends Details{
 	@NotNull(message ="Payment type should not Null." )
 	private Boolean payment;
 	
-	@NotBlank(message ="WantedShift should not Blank." )
-	@NotEmpty(message ="WantedShift should not Empty." )
-	@NotNull(message ="WantedShift should not Null." )
-	private String wantedShift;
+	@Enumerated(EnumType.STRING)
+	private ShiftName wantedShift;
+	
 	
 	private String providedShift;
 	

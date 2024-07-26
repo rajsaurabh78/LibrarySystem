@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,10 +37,11 @@ public class Shift {
 	@SequenceGenerator(name="shift_seq", sequenceName="shift_seq",allocationSize=1, initialValue=1)
 	private Integer shiftId;
 	
-	@NotBlank(message ="ShiftName should not Blank." )
-	@NotEmpty(message ="ShiftName should not Empty." )
-	@NotNull(message ="ShiftName should not Null." )
-	private String shiftName;
+//	@NotBlank(message ="ShiftName should not Blank." )
+//	@NotEmpty(message ="ShiftName should not Empty." )
+//	@NotNull(message ="ShiftName should not Null." )
+	@Enumerated(EnumType.STRING)
+	private ShiftName shiftName;
 	
 //	@NotBlank(message ="StartTime should not Blank." )
 //	@NotEmpty(message ="StartTime should not Empty." )

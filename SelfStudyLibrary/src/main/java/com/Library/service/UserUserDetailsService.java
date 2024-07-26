@@ -19,8 +19,6 @@ import com.Library.modal.Authority;
 import com.Library.modal.Student;
 import com.Library.repository.AdminRepository;
 import com.Library.repository.studentRepository;
-
-import jakarta.transaction.Transactional;
 @Service
 public class UserUserDetailsService implements UserDetailsService{
 
@@ -47,7 +45,7 @@ public class UserUserDetailsService implements UserDetailsService{
 			List<Authority> auths= stu.getAuthority();
 			
 			for(Authority auth:auths) {
-				SimpleGrantedAuthority sga=new SimpleGrantedAuthority(auth.getName());
+				SimpleGrantedAuthority sga=new SimpleGrantedAuthority(auth.getRole().toString());
 		//		System.out.println("siga "+sga);
 				authorities.add(sga);
 			}
@@ -74,7 +72,7 @@ public class UserUserDetailsService implements UserDetailsService{
 				List<Authority> auths= adm.getAuthorities();
 				
 				for(Authority auth:auths) {
-					SimpleGrantedAuthority sga=new SimpleGrantedAuthority(auth.getName());
+					SimpleGrantedAuthority sga=new SimpleGrantedAuthority(auth.getRole().toString());
 			//		System.out.println("siga "+sga);
 					authorities.add(sga);
 				}

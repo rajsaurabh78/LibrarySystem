@@ -2,10 +2,13 @@ package com.Library.DTO;
 
 import java.time.LocalDate;
 
+import com.Library.modal.ShiftName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
@@ -38,6 +41,7 @@ public class UpdateDetailsDTO {
 	@Past(message = "DOB should be in past.")
 	private LocalDate DOB;
 	
-	private String wantedShift;
+	@Enumerated(EnumType.STRING)
+	private ShiftName wantedShift;
 
 }

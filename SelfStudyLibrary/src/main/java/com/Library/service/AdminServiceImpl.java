@@ -31,6 +31,7 @@ import com.Library.modal.Admin;
 import com.Library.modal.Authority;
 import com.Library.modal.Floor;
 import com.Library.modal.Library;
+import com.Library.modal.Role;
 import com.Library.modal.Seat;
 import com.Library.modal.Shift;
 import com.Library.modal.Student;
@@ -149,7 +150,7 @@ public class AdminServiceImpl implements AdminService{
 		}
 		List<SeatDTO> sdto=new ArrayList<>();
 		for(Seat s:seatList) {
-			SeatDTO seat=new SeatDTO(s.getSeatNo(),s.getShift().getShiftName(),s.getShift().getFloor().getName());
+			SeatDTO seat=new SeatDTO(s.getSeatNo(),s.getShift().getShiftName().toString(),s.getShift().getFloor().getName());
 			sdto.add(seat);
 		}
 		return sdto;
@@ -206,7 +207,7 @@ public class AdminServiceImpl implements AdminService{
 		}
 		List<StudentDTO> dto=new ArrayList<>();
 		for(Student stu:sList) {
-				dto.add(new StudentDTO(stu.getName(), stu.getUserId(),stu.getPayment(),stu.getWantedShift(),stu.getProvidedShift()));		
+				dto.add(new StudentDTO(stu.getName(), stu.getUserId(),stu.getPayment(),stu.getWantedShift().toString(),stu.getProvidedShift()));		
 		}
 		return dto;
 	}
@@ -218,7 +219,7 @@ public class AdminServiceImpl implements AdminService{
 		if(opt.isPresent()&& opt.get().getPayment()==true){
 			boolean flag=true;
 			Student stu=opt.get();
-			String shiftName=stu.getWantedShift();
+			String shiftName=stu.getWantedShift().toString();
 			Seat seat;
 			if(shiftName.equals("FIRST") ) {
 				seat=seatRepository.getFirstShiftSeat();
@@ -232,7 +233,7 @@ public class AdminServiceImpl implements AdminService{
 			List<Seat> seats=stu.getSeats();			
 			if(seats.size()>0) {
 				for(Seat s:seats) {
-					if(s.getShift().getShiftName().toUpperCase().equals(shiftName)) {
+					if(s.getShift().getShiftName().toString().equals(shiftName)) {
 						flag=false;
 						break;
 					}	
@@ -277,7 +278,7 @@ public class AdminServiceImpl implements AdminService{
 			List<Seat> seats=stu.getSeats();			
 			if(seats.size()>0) {
 				for(Seat s:seats) {
-					if(s.getShift().getShiftName().toUpperCase().equals(shiftName)) {
+					if(s.getShift().getShiftName().toString().equals(shiftName)) {
 						flag=false;
 						break;
 					}	
@@ -507,8 +508,8 @@ public class AdminServiceImpl implements AdminService{
 
 		admin.setPassword(passwordEncoder.encode(admin.getPassword()));
 		List<Authority> auths= new ArrayList<>();
-		auths.add(new Authority(null,"ROLE_ADMIN",null,admin));
-		auths.add(new Authority(null,"ROLE_USER",null,admin));
+		auths.add(new Authority(null,Role.ROLE_ADMIN,null,admin));
+		auths.add(new Authority(null,Role.ROLE_USER,null,admin));
 		admin.setAuthorities(auths);
 		return adminRepository.save(admin);
 		
