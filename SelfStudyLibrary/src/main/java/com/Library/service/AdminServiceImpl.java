@@ -3,8 +3,7 @@ package com.Library.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import javax.security.auth.login.LoginException;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +23,7 @@ import com.Library.DTO.UpdateShiftDTO;
 import com.Library.exception.AdminException;
 import com.Library.exception.FloorException;
 import com.Library.exception.LibraryException;
+import com.Library.exception.LoginException;
 import com.Library.exception.SeatException;
 import com.Library.exception.ShiftException;
 import com.Library.exception.StudentException;
@@ -68,17 +68,15 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	public List<Student> getAllStudentInSortingOrder(String field, String direction)  {
-
-		if(direction.toUpperCase().equals("ASC")||direction.toUpperCase().equals("DSC")) {
-			List<Student> sList=studentRepository.findAll(
-				
-				direction.toUpperCase().equals("ASC")? Sort.by(field).ascending() : Sort.by(field).descending());
+		if(direction.toUpperCase().equalsIgnoreCase("ASC")||direction.toUpperCase().equalsIgnoreCase("DSC")) {
+			List<Student> sList=studentRepository.findAll(direction.toUpperCase().equals("ASC")? Sort.by(field).ascending() : Sort.by(field).descending());
 			if(sList.isEmpty()) {
 				throw new StudentException("No any student found .");
 			}else 
 				return sList;
-		}else
-			throw new StudentException("Inviled direction .");
+		}else {
+			throw new StudentException("Invalid direction. Use 'ASC' or 'DSC'.");
+		}
 		
 	}
 	
@@ -157,20 +155,15 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public List<Student> getAllStudentShiftWise(Integer shiftNo) {
-
-		Shift sft=shiftRepository.findById(shiftNo).orElseThrow(()-> new StudentException("Inviled shifttNo ."));
-		List<Student> studs=new ArrayList<>();
-		List<Seat> seats=sft.getSeatList();
-		for(Seat s:seats) {
-			if(s.getStudent()!=null) {
-				studs.add(s.getStudent());
-			}
-		}
-		if(studs.size()==0 ) {
+	public List<Student> getAllStudentShiftWise(String shift) {
+		
+		List<Student> students= seatRepository.findAll().stream()
+				.filter(s->s.getShift().getShiftName().toString().equals(shift.toUpperCase())&&s.getStudent()!=null).collect(Collectors.toList())
+				.stream().map(s->s.getStudent()).collect(Collectors.toList());
+		if(students.size()==0 ) {
 			throw new StudentException("No data present .");
 		}else
-			return studs;
+			return students;
 		
 	}
 
@@ -190,7 +183,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<Student> getStudentAreaWise(String address) {
 
-		List<Student> sList=studentRepository.findByAddress(address);
+		List<Student> sList=studentRepository.findByAddressContaining(address);
 		if(!sList.isEmpty()) {
 			return sList;
 		}
@@ -643,6 +636,15 @@ public class AdminServiceImpl implements AdminService{
 		}else
 			throw new StudentException("Inviled userId .");
 		
+	}
+
+	@Override
+	public Admin profile() {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Admin admin = adminRepository.findByMobile(authentication.getName())
+				.orElseThrow(() -> new com.Library.exception.LoginException("Please Login First"));
+		return admin;
 	}
 
 }

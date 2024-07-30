@@ -11,5 +11,7 @@ import com.Library.modal.Student;
 @Repository
 public interface studentRepository extends JpaRepository<Student, Integer>,PagingAndSortingRepository<Student, Integer>{
 	Optional<Student> findByEmail(String email);
-	List<Student> findByAddress(String address);
+	List<Student> findByAddressContaining(String address);
+	List<Student> findByProvidedShift(String shift);
+	
 }

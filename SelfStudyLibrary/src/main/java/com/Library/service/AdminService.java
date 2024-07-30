@@ -27,7 +27,7 @@ public interface AdminService {
 	public Student getStudentBySeatNo(Integer SeatNo);
 	public List<Student> getAllStudentByFloor(Integer floorNo);
 	public List<SeatDTO> getAllAvalibleSeats();
-	public List<Student> getAllStudentShiftWise(Integer shiftNo);
+	public List<Student> getAllStudentShiftWise(String shift);
 	public String removeStudent(Integer userId);
 	public List<Student> getStudentAreaWise(String address);
 	//cont add 
@@ -59,5 +59,6 @@ public interface AdminService {
 	public String updateLibrary(Integer lId,UpdateLibraryDTO updateLibraryDTO);
 	public String deleteLibrary(Integer lId);
 	public String deleteSeatById(Integer seatNo);
+	public Admin profile();
 
 }

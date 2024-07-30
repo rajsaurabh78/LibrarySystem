@@ -104,8 +104,8 @@ public class AdminController {
 	}
 	
 	@GetMapping("/studentshift/{shiftNo}")
-	public ResponseEntity<List<Student>> getAllStudentShiftWiseController(@Valid @PathVariable("shiftNo")Integer shiftNo){
-		List<Student> list=adminService.getAllStudentShiftWise(shiftNo);
+	public ResponseEntity<List<Student>> getAllStudentShiftWiseController(@Valid @PathVariable("shiftNo")String shift){
+		List<Student> list=adminService.getAllStudentShiftWise(shift);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
@@ -136,6 +136,12 @@ public class AdminController {
 	@PutMapping("/uppay/{id}")
 	public ResponseEntity<String> updatePaymentController(@Valid @PathVariable("id")Integer id){
 		String list=adminService.updatePayment(id);
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
+	
+	@GetMapping("/profile")
+	public ResponseEntity<Admin> profileController(){
+		Admin list=adminService.profile();
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
