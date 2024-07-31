@@ -365,7 +365,10 @@ public class AdminServiceImpl implements AdminService{
 		
 		Floor floor=floorRepository.findById(floorNo)
 				.orElseThrow(()-> new FloorException("Inviled floorNo ."));
-		floor.setName(newName);
+		if(newName!=null) {
+			floor.setName(newName);
+		}
+		
 		return floorRepository.save(floor);
 		
 	}
