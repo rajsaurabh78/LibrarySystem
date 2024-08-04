@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.Library.DTO.SeatDTO;
 import com.Library.DTO.ShiftDTO;
+import com.Library.DTO.ShiftStudentDTO;
 import com.Library.DTO.StudentDTO;
 import com.Library.DTO.UpdateDetailsDTO;
 import com.Library.DTO.UpdateLibraryDTO;
@@ -148,7 +149,7 @@ public class AdminServiceImpl implements AdminService{
 		}
 		List<SeatDTO> sdto=new ArrayList<>();
 		for(Seat s:seatList) {
-			SeatDTO seat=new SeatDTO(s.getSeatNo(),s.getShift().getShiftName().toString(),s.getShift().getFloor().getName());
+			SeatDTO seat=new SeatDTO(s.getSeatNo(),s.getShift().getShiftName().toString(),s.getShift().getFloor().getName(),s.getShift().getFloor().getLibrary().getName());
 			sdto.add(seat);
 		}
 		return sdto;
@@ -593,13 +594,33 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public List<Seat> getSeatsByShift(Integer shiftId) {
+	public List<ShiftStudentDTO> getSeatsByShift(Integer shiftId) {
 
-		Optional<Shift> opt=shiftRepository.findById(shiftId);
-		if(opt.isPresent()) {
-			return opt.get().getSeatList();
+		Shift shift=shiftRepository.findById(shiftId)
+				.orElseThrow(()->new ShiftException("Inviled Shift id"));
+		List<Seat>seats=shift.getSeatList();
+		if(seats.isEmpty()) {
+			throw new SeatException("Emp0ty list");
+		}
+		List<ShiftStudentDTO> list=new ArrayList<>();
+		for(Seat s:seats) {
+			list.add(new ShiftStudentDTO(s, s.getStudent()));
+		}
+		return list;
+		
+	}
+	
+	@Override
+	public List<Student> getAllStudentByShiftId(Integer shiftId) {
+
+		List<Student> students= seatRepository.findAll().stream()
+				.filter(s->s.getShift().getShiftId()==shiftId).collect(Collectors.toList())
+				.stream().map(s->s.getStudent()).collect(Collectors.toList());
+		if(students.size()==0 ) {
+			throw new StudentException("No data present .");
 		}else
-			throw new ShiftException("Inviled Shift id");
+			return students;
+		
 		
 	}
 
@@ -649,5 +670,7 @@ public class AdminServiceImpl implements AdminService{
 				.orElseThrow(() -> new com.Library.exception.LoginException("Please Login First"));
 		return admin;
 	}
+
+
 
 }

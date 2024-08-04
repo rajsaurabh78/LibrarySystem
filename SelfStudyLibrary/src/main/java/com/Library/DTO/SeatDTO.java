@@ -15,4 +15,5 @@ public class SeatDTO {
 	private Integer seatNo;
 	private String shift;
 	private String floor;
+	private String library;
 }

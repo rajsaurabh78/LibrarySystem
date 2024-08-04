@@ -6,6 +6,7 @@ import javax.security.auth.login.LoginException;
 
 import com.Library.DTO.SeatDTO;
 import com.Library.DTO.ShiftDTO;
+import com.Library.DTO.ShiftStudentDTO;
 import com.Library.DTO.StudentDTO;
 import com.Library.DTO.UpdateDetailsDTO;
 import com.Library.DTO.UpdateLibraryDTO;
@@ -28,6 +29,7 @@ public interface AdminService {
 	public List<Student> getAllStudentByFloor(Integer floorNo);
 	public List<SeatDTO> getAllAvalibleSeats();
 	public List<Student> getAllStudentShiftWise(String shift);
+	public List<Student> getAllStudentByShiftId(Integer shiftId);
 	public String removeStudent(Integer userId);
 	public List<Student> getStudentAreaWise(String address);
 	//cont add 
@@ -51,7 +53,7 @@ public interface AdminService {
 	public String removeShift(Integer hiftId);
 	public List<Shift>getShiftsByFloor(Integer fId);
 	
-	public List<Seat> getSeatsByShift(Integer shiftId);
+	public List<ShiftStudentDTO> getSeatsByShift(Integer shiftId);
 	public List<Seat> addSeat(Integer shiftNo,Integer noOfSeats);
 	public String removeStudentSeat(Integer seatNo_Or_UserId);
 	public Library addLibrary (Library library);

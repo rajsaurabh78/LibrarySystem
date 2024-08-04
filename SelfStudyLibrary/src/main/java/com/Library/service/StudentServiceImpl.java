@@ -3,6 +3,7 @@ package com.Library.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.security.auth.login.LoginException;
 
@@ -19,6 +20,7 @@ import com.Library.modal.Authority;
 import com.Library.modal.Floor;
 import com.Library.modal.Library;
 import com.Library.modal.Role;
+import com.Library.modal.Seat;
 import com.Library.modal.Shift;
 import com.Library.modal.Student;
 import com.Library.repository.FloorRepository;
@@ -46,7 +48,6 @@ public class StudentServiceImpl implements StudentService{
 		student.setPassword(passwordEncoder.encode(student.getPassword()));
 		student.setProvidedShift(null);
 		List<Authority> auths= new ArrayList<>();
-		auths.add(new Authority(null, null, student, null));
 		auths.add(new Authority(null,Role.ROLE_STUDENT, student,null));
 		auths.add(new Authority(null,Role.ROLE_USER, student,null));
 		student.setAuthority(auths);
@@ -73,16 +74,18 @@ public class StudentServiceImpl implements StudentService{
 	@Override//work
 	public List<Library> getAllDetails() {
 		List<Library> labs=libraryRepository.findAll();
-//		for(Library l:labs) {
-//			List<Floor> fls=l.getFloorList();
-//			for(Floor f:fls) {
-//				List<Shift> sft=f.getShiftList();
-//				for(Shift s:sft) {
-//					s.setSeatList(null);
-//				}
-//			}
-//			
-//		}
+		for(Library l:labs) {
+			List<Floor> fls=l.getFloorList();
+			for(Floor f:fls) {
+				List<Shift> sft=f.getShiftList();
+				for(Shift seat:sft) {
+					List<Seat>seats= seat.getSeatList().stream()
+							.filter(s->s.getStudent()==null).collect(Collectors.toList());
+					seat.setSeatList(seats);
+				}
+			}
+			
+		}
 		if(labs.size()>0) {
 			return labs;
 		}else

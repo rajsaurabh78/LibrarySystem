@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Library.DTO.SeatDTO;
 import com.Library.DTO.ShiftDTO;
+import com.Library.DTO.ShiftStudentDTO;
 import com.Library.DTO.StudentDTO;
 import com.Library.DTO.UpdateDetailsDTO;
 import com.Library.DTO.UpdateLibraryDTO;
@@ -109,6 +110,12 @@ public class AdminController {
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
+	@GetMapping("/student/shift/{shiftNo}")
+	public ResponseEntity<List<Student>> getAllStudentByShiftIdController(@Valid @PathVariable("shiftNo")Integer shiftNo){
+		List<Student> list=adminService.getAllStudentByShiftId(shiftNo);
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
+	
 	@DeleteMapping("/studentdel/{userId}")
 	public ResponseEntity<String> removeStudentController(@Valid @PathVariable("userId")Integer userId){
 		String list=adminService.removeStudent(userId);
@@ -171,8 +178,8 @@ public class AdminController {
 	}
 	
 	@GetMapping("/seats/{shiftId}")
-	public ResponseEntity<List<Seat>> getSeatsByShiftController(@Valid @PathVariable("shiftId")Integer shiftId){
-		List<Seat> list=adminService.getSeatsByShift(shiftId);
+	public ResponseEntity<List<ShiftStudentDTO>> getSeatsByShiftController(@Valid @PathVariable("shiftId")Integer shiftId){
+		List<ShiftStudentDTO> list=adminService.getSeatsByShift(shiftId);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
