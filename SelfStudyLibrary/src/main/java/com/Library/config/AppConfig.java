@@ -40,7 +40,9 @@ public SecurityFilterChain springSecurityConfiguration(HttpSecurity http) throws
 			auth
 			.requestMatchers(HttpMethod.POST, "/register/**")
 			.permitAll()
-			.requestMatchers(HttpMethod.POST, "/admin/seats")
+			.requestMatchers(HttpMethod.PATCH, "/register/**")
+			.permitAll()
+			.requestMatchers(HttpMethod.GET, "/admin/seats")
 			.hasAnyRole("ADMIN","USER","STUDENT")
 			.requestMatchers("/swagger-ui*/**","/v3/api-docs/**").permitAll()
 			.requestMatchers(HttpMethod.POST,"/admin/**").hasRole("ADMIN")

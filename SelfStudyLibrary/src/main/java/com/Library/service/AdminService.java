@@ -1,6 +1,8 @@
 package com.Library.service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import javax.security.auth.login.LoginException;
 
@@ -26,18 +28,19 @@ public interface AdminService {
 	public List<Student> getAllSortedStudentWithPagination(String field,String direction,Integer pageNo,Integer pageSize);
 	public Student getStudentById(Integer id);
 	public Student getStudentBySeatNo(Integer SeatNo);
-	public List<Student> getAllStudentByFloor(Integer floorNo);
+	public Set<Student> getAllStudentByFloor(Integer floorNo);
 	public List<SeatDTO> getAllAvalibleSeats();
 	public List<Student> getAllStudentShiftWise(String shift);
 	public List<Student> getAllStudentByShiftId(Integer shiftId);
 	public String removeStudent(Integer userId);
 	public List<Student> getStudentAreaWise(String address);
+	public String forgetPassword(String mobile,LocalDate dob,String password);
 	//cont add 
 	public List<StudentDTO> getAllStudentWithNoSeatNo();
 	public List<Student> allStudentWithNoPayment();
 	public String updatePayment(Integer id);
 	public String studentSeatAllotement(Integer Id);
-	public String seatAllotementManual(Integer id,String shiftName);
+	public String seatAllotementManual(Integer id);
 	
 	public Admin addAdmin(Admin admin);
 	public Admin updateAdmin(UpdateDetailsDTO updateDetailsDTO)throws LoginException;

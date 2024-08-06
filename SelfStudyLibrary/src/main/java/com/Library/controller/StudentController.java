@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Library.DTO.ForgetPassDTO;
 import com.Library.DTO.UpdateDetailsDTO;
 import com.Library.modal.Library;
 import com.Library.modal.Shift;
@@ -60,5 +61,6 @@ public class StudentController {
 		return new ResponseEntity<>(st,HttpStatus.OK);
 		
 	}
+	
 
 }

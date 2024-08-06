@@ -1,5 +1,6 @@
 package com.Library.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,8 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.Library.DTO.UpdateDetailsDTO;
+import com.Library.exception.AdminException;
 import com.Library.exception.LibraryException;
 import com.Library.exception.ShiftException;
+import com.Library.exception.StudentException;
 import com.Library.modal.Authority;
 import com.Library.modal.Floor;
 import com.Library.modal.Library;
@@ -51,6 +54,7 @@ public class StudentServiceImpl implements StudentService{
 		auths.add(new Authority(null,Role.ROLE_STUDENT, student,null));
 		auths.add(new Authority(null,Role.ROLE_USER, student,null));
 		student.setAuthority(auths);
+		student.setPayment(false);
 		return studentRepository.save(student);
 	}
 
@@ -133,11 +137,18 @@ public class StudentServiceImpl implements StudentService{
 		return st;
 	}
 
-//	@Override
-//	public Admin getAdminByMobile(String mobile) {
-//
-//		return adminRepository.findByMobile(mobile).orElseThrow(()->new AdminException("Inviled mobile no ."));
-//		
-//	}
+	@Override
+	public String forgetPassword(String email, LocalDate dob, String password) {
+		Student student=studentRepository.findByEmail(email)
+				.orElseThrow(()->new StudentException("Inviled email."));
+		if(student.getDOB().equals(dob)) {
+			student.setPassword(passwordEncoder.encode(password));
+			studentRepository.save(student);
+			return "Password updated.";
+		}else {
+			throw new StudentException("Date of birth did not match.");
+		}
+	}
+
 
 }

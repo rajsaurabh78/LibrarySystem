@@ -1,6 +1,7 @@
 package com.Library.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.security.auth.login.LoginException;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Library.DTO.ForgetPassDTO;
 import com.Library.DTO.SeatDTO;
 import com.Library.DTO.ShiftDTO;
 import com.Library.DTO.ShiftStudentDTO;
@@ -93,8 +95,8 @@ public class AdminController {
 	}
 	//need
 	@GetMapping("/studentfl/{floorNo}")
-	public ResponseEntity<List<Student>> getAllStudentByFloorController(@Valid @PathVariable("floorNo")Integer floorNo){
-		List<Student> list=adminService.getAllStudentByFloor(floorNo);
+	public ResponseEntity<Set<Student>> getAllStudentByFloorController(@Valid @PathVariable("floorNo")Integer floorNo){
+		Set<Student> list=adminService.getAllStudentByFloor(floorNo);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	//frontend pending
@@ -191,8 +193,8 @@ public class AdminController {
 	}
 	
 	@GetMapping("/studentseats/{id}")
-	public ResponseEntity<String> seatAllotementManualController(@Valid @PathVariable("id")Integer id,@Valid @RequestParam("shiftName")String shiftName){
-		String list=adminService.seatAllotementManual(id, shiftName.toUpperCase());
+	public ResponseEntity<String> seatAllotementManualController(@Valid @PathVariable("id")Integer id){
+		String list=adminService.seatAllotementManual(id);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 
@@ -278,5 +280,12 @@ public class AdminController {
 		String list=adminService.removeStudentSeat(seatNo_Or_UserId);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}	
-
+	
+	@PatchMapping("/forget/password")
+	public ResponseEntity<String> updateStudentController(@Valid @RequestBody ForgetPassDTO forgetPassDTO ){
+		
+		String msg=adminService.forgetPassword(forgetPassDTO.getUserName(), forgetPassDTO.getDob(), forgetPassDTO.getPassword());
+		return new ResponseEntity<>(msg,HttpStatus.OK);
+		
+	}
 }

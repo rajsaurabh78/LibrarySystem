@@ -1,5 +1,5 @@
 package com.Library.modal;
 
 public enum ShiftName {
-	FIRST,SECOND,THIRD
+	FIRST,SECOND,FULL
 }
