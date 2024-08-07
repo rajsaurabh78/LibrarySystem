@@ -315,18 +315,10 @@ public class AdminServiceImpl implements AdminService{
 		Seat seat2=seatRepository.getSecondSeat();;
 		
 		boolean flag=true;
-		String[] str= {"FIRST","SECOND"};
-		int i=0;
-		
-		List<Seat> seats=stu.getSeats();			
+		List<Seat> seats=stu.getSeats();		
+	
 		if(seats.size()>0) {
-			for(Seat s:seats) {
-				if(s.getShift().getShiftName().toString().equals(str[i])) {
-					flag=false;
-					break;
-				}	
-				i++;
-			}
+			flag=false;
 		}	
 		if(seat==null ||seat2==null) {
 			throw new SeatException("Seat not avalible .");
@@ -343,9 +335,6 @@ public class AdminServiceImpl implements AdminService{
 			return "Registered in full shift." ;
 		}else
 			throw new SeatException("Student is already in shift ");
-	
-		
-		
 		
 	}
 
