@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.Library.DTO.UpdateDetailsDTO;
-import com.Library.exception.AdminException;
 import com.Library.exception.LibraryException;
 import com.Library.exception.ShiftException;
 import com.Library.exception.StudentException;

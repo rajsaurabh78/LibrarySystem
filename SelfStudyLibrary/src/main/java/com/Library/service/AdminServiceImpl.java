@@ -45,6 +45,8 @@ import com.Library.repository.LibraryRepository;
 import com.Library.repository.SeatRepository;
 import com.Library.repository.ShiftRepository;
 import com.Library.repository.studentRepository;
+
+import jakarta.annotation.PostConstruct;
 @Service
 public class AdminServiceImpl implements AdminService{
 	
@@ -69,7 +71,26 @@ public class AdminServiceImpl implements AdminService{
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-
+	@PostConstruct
+	public void init() {
+		String defaultAdminUsername = "9999999999";
+        String defaultAdminPassword = "admin123";
+        Optional<Admin> opt= adminRepository.findByMobile(defaultAdminUsername);
+        if(opt.isEmpty()) {
+			Admin admin=new Admin();
+			admin.setName("Admin");
+			admin.setAddress("Address");
+			admin.setEmail("xyz@mail.com");;
+			admin.setMobile(defaultAdminUsername);
+			admin.setPassword(passwordEncoder.encode(defaultAdminPassword));
+			List<Authority> auths= new ArrayList<>();
+			auths.add(new Authority(null,Role.ROLE_ADMIN,null,admin));
+			admin.setAuthorities(auths);
+			adminRepository.save(admin);
+        }
+		
+	}
+	
 	@Override
 	public List<Student> getAllStudentInSortingOrder(String field, String direction)  {
 		if(direction.toUpperCase().equalsIgnoreCase("ASC")||direction.toUpperCase().equalsIgnoreCase("DSC")) {
